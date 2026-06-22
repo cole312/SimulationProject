@@ -1,5 +1,5 @@
 [project]
-dependencies = ["disimpy>=0.3.0,<0.4"]
+dependencies = ["disimpy>=0.3.0,<0.4", "manifold3d>=3.5.1,<4"]
 name = "pixi-py"
 requires-python = ">= 3.9"
 version = "0.1.0"
@@ -13,7 +13,6 @@ channels = ["conda-forge"]
 platforms = ["linux-64"]
 
 [tool.pixi.pypi-dependencies]
-pixi_py = { path = ".", editable = true }
 
 [tool.pixi.tasks]
 

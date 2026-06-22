@@ -4,20 +4,17 @@ import pandas as pd
 import os
 
 #Name mesh here
-name = 'testCat'
+name = 'single_axon1'
 folder = (f'{name}_folder')
 
-#Set to false for complex meshs.
-plotMesh = False
-
 #make new directory for all outputs
-os.mkdir(f'/output/{folder}')
+os.mkdir(f'outputs/{folder}')
 
 
 #Create mesh here
 meshs = []
 
-with open("/CATERPillar outputs") as f:
+with open("CATERPillar_outputs/single_axon_run3.csv") as f:
     next(f)  # Skip the header line
 
     for line in f:
@@ -45,32 +42,12 @@ print(f"Union completed. Number of volumes: {num_volumes}")
 trimesh.smoothing.filter_laplacian(mesh, iterations=1)
 print(f"Smoothing completed")
 
-if plotMesh:
-    
-    #Plotting mesh.
-    fig = plt.figure()
-    ax = fig.add_subplot(111, projection='3d')
-    mesh.apply_scale(1e-6)
-    ax.plot_trisurf(
-        mesh.vertices[:, 0], 
-        mesh.vertices[:, 1], 
-        mesh.vertices[:, 2], 
-        triangles=mesh.faces, 
-        cmap='viridis',
-        edgecolor='k', 
-        linewidth=0.5
-    )
-
-    ax.set_box_aspect([1, 1, 1])
-    plt.savefig(f'/home/summer1/simulation/SLURM/outputs/{folder}/{name}_mesh', dpi= 300, bbox_inches='tight')
-
-
 #csv export
 data_verticies = pd.DataFrame(mesh.vertices, columns=['x','y','z'])
-data_verticies.to_csv(f'/home/summer1/simulation/SLURM/outputs/{folder}/{name}_vertices', index=False)
+data_verticies.to_csv(f'outputs/{folder}/{name}_vertices', index=False)
 
 data_faces = pd.DataFrame(mesh.faces, columns=['v1','v2','v3'])
-data_faces.to_csv(f'/home/summer1/simulation/SLURM/outputs/{folder}/{name}_faces', index=False)
+data_faces.to_csv(f'outputs/{folder}/{name}_faces', index=False)
 
 
 
