@@ -4,8 +4,8 @@ import pandas as pd
 import os
 
 #Name mesh here
-name = 'single_axon1'
-folder = (f'{name}_folder')
+name = 'test1'
+folder = (f'{name}_outputs')
 
 #make new directory for all outputs
 os.mkdir(f'outputs/{folder}')
@@ -41,6 +41,8 @@ num_volumes = len(independent_volumes)
 print(f"Union completed. Number of volumes: {num_volumes}")
 trimesh.smoothing.filter_laplacian(mesh, iterations=1)
 print(f"Smoothing completed")
+
+mesh.apply_scale(1e-6)
 
 #csv export
 data_verticies = pd.DataFrame(mesh.vertices, columns=['x','y','z'])

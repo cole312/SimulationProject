@@ -5,13 +5,27 @@ import matplotlib.pyplot as plt
 from disimpy import gradients, simulations, substrates
 from dipy.core.sphere import fibonacci_sphere
 import pandas as pd
+import tomli
+
+with open("sim_configs/test_config.toml", "rb") as f:
+    config = tomli.load(f)
+
+#Params
+meshName = config["substrate"]["name"]
+folder = f"{meshName}_outputs"
+n_walkers = config["simulation"]["n_walkers"]
+n_t = config["simulation"]["n_t"]
+diffusivity = config["simulation"]["diffusivity"]
+waveforms = config["waveform"]["waveform_file"]
+directions = config["waveform"]["num_directions"]
+b_num = config["waveform"]["num_b"]
 
 
 def get_substrate(meshName, folder):
 
     print(meshName)
-    data_verts = pd.read_csv(f'/home/summer1/simulation/SLURM/outputs/{folder}/{meshName}_vertices')
-    data_faces = pd.read_csv(f'/home/summer1/simulation/SLURM/outputs/{folder}/{meshName}_faces')
+    data_verts = pd.read_csv(f'outputs/{folder}/{meshName}_vertices')
+    data_faces = pd.read_csv(f'outputs/{folder}/{meshName}_faces')
 
     vertices = data_verts.to_numpy()
     faces = data_faces.to_numpy()
@@ -50,26 +64,12 @@ def read_shape(filename):
 
     return x_grad,y_grad,z_grad
 
-#Params
-meshName = "testSphere"
-folder = f"{meshName}_outputs"
-n_walkers = 100
-n_t = 1e3
-diffusivity = 1e-9
 
-#List of file names to iterate through
-filenames = [
-    "/home/summer1/simulation/waveform1.csv",
-    "/home/summer1/simulation/waveform2.csv",
-    "/home/summer1/simulation/waveform3.csv",
-    "/home/summer1/simulation/waveform4.csv",
-    "/home/summer1/simulation/waveform5.csv"
-]
 substrate = get_substrate(meshName, folder)
 
 shape_signals = []
 
-for filecount, file in enumerate(filenames):
+for filecount, file in enumerate(waveforms):
 
     x_grad, y_grad, z_grad = read_shape(file)
     
@@ -88,7 +88,7 @@ for filecount, file in enumerate(filenames):
     print(f"Bval: {(gradients.calc_b(gradient,0.02e-3)*1e-6)[0]:.0f}")
 
     #30 equally spaced points around a sphere. These are target vectors for the rotation
-    bvecs = fibonacci_sphere(n_points=30)
+    bvecs = fibonacci_sphere(n_points=directions)
 
 
     gradient_final = np.zeros([len(bvecs), len(time_points), 3])
@@ -111,11 +111,11 @@ for filecount, file in enumerate(filenames):
     print(f"B-base: {b_base[0]}")
 
     signals = []
-    b_targets = np.linspace(0, 4500, 6) 
+    b_targets = np.linspace(0, 4500, b_num) 
 
     #Scale gradient values to achieve different b's. Scale is calcuated via b_base
     for j, b in enumerate(b_targets):
-        print(f"\n\nGradient: {filecount + 1} / {len(filenames)}. B value: {j} / {len(b_targets)}\n\n")
+        print(f"\n\nGradient: {filecount + 1} / {len(waveforms)}. B value: {j} / {len(b_targets)}\n\n")
         if b == 0:
             signals.append(n_walkers) 
             continue
@@ -149,7 +149,7 @@ curvesA = []
 curvesB = []
 curvesC = []
 
-for i in range(len(filenames)):
+for i in range(len(waveforms)):
     A, B, C = np.polyfit(b_targets, log_signals[i], 2)
     D = -B
     md.append(D)
@@ -179,7 +179,7 @@ ax.set_xlabel("b values")
 ax.set_ylabel("Normalized Signal")
 ax.grid(True, which="both", linestyle='--', alpha=0.5)
 ax.legend()
-plt.savefig(f"/home/summer1/simulation/SLURM/outputs/{folder}/{meshName}_signals_{n_walkers}walkers_{n_t}steps.png")
+plt.savefig(f"outputs/{folder}/{meshName}_signals_{n_walkers}walkers_{n_t}steps.png")
 plt.show()
 
 fig, ax = plt.subplots(figsize=(8, 5))
@@ -229,7 +229,7 @@ plt.plot(x1,y1)
 plt.plot(x1,y2, ls= ":", alpha = 0.7)
 plt.plot(x1,y3, ls = ':', alpha= 0.7)
 
-plt.savefig(f"/home/summer1/simulation/SLURM/outputs/{folder}/{meshName}_Md_F_graph.png")
+plt.savefig(f"outputs/{folder}/{meshName}_Md_F_graph.png")
 
 
 

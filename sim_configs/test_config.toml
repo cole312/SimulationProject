@@ -1,0 +1,18 @@
+[substrate]
+name = "test1"
+
+[simulation]
+diffusivity = 1e-9
+n_walkers = 1e4
+n_t = 1e3
+
+[waveform]
+waveform_file = [
+    "gradients/waveform1.csv",
+    "gradients/waveform2.csv",
+    "gradients/waveform3.csv",
+    "gradients/waveform4.csv",
+    "gradients/waveform5.csv"
+]
+num_directions = 30
+num_b = 6
