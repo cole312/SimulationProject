@@ -19,6 +19,7 @@ diffusivity = config["simulation"]["diffusivity"]
 waveforms = config["waveform"]["waveform_file"]
 directions = config["waveform"]["num_directions"]
 b_num = config["waveform"]["num_b"]
+position = config["substrate"]["position"]
 
 
 def get_substrate(meshName):
