@@ -1,10 +1,10 @@
 [substrate]
-name = "test1"
+name = "test"
 
 [simulation]
 diffusivity = 1e-9
-n_walkers = 1e4
-n_t = 1e3
+n_walkers = 1000
+n_t = 1000
 
 [waveform]
 waveform_file = [
