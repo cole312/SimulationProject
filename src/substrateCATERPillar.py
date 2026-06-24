@@ -5,10 +5,9 @@ import os
 
 #Name mesh here
 name = 'test1'
-folder = (f'{name}_outputs')
 
 #make new directory for all outputs
-os.mkdir(f'outputs/{folder}')
+os.mkdir(f'substrate/{name}', exist_ok=True)
 
 
 #Create mesh here
@@ -46,10 +45,10 @@ mesh.apply_scale(1e-6)
 
 #csv export
 data_verticies = pd.DataFrame(mesh.vertices, columns=['x','y','z'])
-data_verticies.to_csv(f'outputs/{folder}/{name}_vertices', index=False)
+data_verticies.to_csv(f'substrate/{name}/{name}_vertices.csv', index=False)
 
 data_faces = pd.DataFrame(mesh.faces, columns=['v1','v2','v3'])
-data_faces.to_csv(f'outputs/{folder}/{name}_faces', index=False)
+data_faces.to_csv(f'substrate/{name}/{name}_faces.csv', index=False)
 
 
 

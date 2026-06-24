@@ -6,13 +6,26 @@ from dipy.core.sphere import fibonacci_sphere
 import pandas as pd
 import tomli
 import csv
+import os
+import argparse
 
-with open("sim_configs/test_config.toml", "rb") as f:
+parser = argparse.ArgumentParser()
+parser.add_argument(
+    "config",
+    type=str,
+
+)
+args = parser.parse_parser_args() if hasattr(parser, 'parse_parser_args') else parser.parse_args()
+
+config_file_path = args.config
+
+config_name = os.path.basename(config_file_path)
+
+with open(config_file_path, "rb") as f:
     config = tomli.load(f)
 
 #Params
 meshName = config["substrate"]["name"]
-folder = f"{meshName}_outputs"
 n_walkers = config["simulation"]["n_walkers"]
 n_t = config["simulation"]["n_t"]
 diffusivity = config["simulation"]["diffusivity"]
@@ -37,7 +50,7 @@ def get_substrate(meshName):
         periodic=True,
         n_sv=np.array([10, 10, 50]),
         quiet= False,
-        init_pos='intra'
+        init_pos=position
     )
 
     return substrate
@@ -70,9 +83,11 @@ substrate = get_substrate(meshName)
 
 #waveform, x, y, z, b value, 
 
-csv_filename=f"outputs/{meshName}_signals"
+csv_filename=f"outputs/{meshName}_signals_{config_name}"
 with open(csv_filename, mode="w", newline="") as f:
     writer = csv.writer(f)
+    
+    f.write(f"# Config file used: {config_name}\n")
     writer.writerow(["waveform","x","y","z","bval","signal"])
 
     shape_signals = []
