@@ -1,5 +1,6 @@
 [substrate]
 name = "test"
+position = "intra"
 
 [simulation]
 diffusivity = 1e-9
