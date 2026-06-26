@@ -20,6 +20,7 @@ args = parser.parse_parser_args() if hasattr(parser, 'parse_parser_args') else p
 config_file_path = args.config
 
 config_name = os.path.basename(config_file_path)
+config_name,_ = os.path.splitext(config_name)
 
 with open(config_file_path, "rb") as f:
     config = tomli.load(f)
@@ -88,7 +89,7 @@ with open(csv_filename, mode="w", newline="") as f:
     writer = csv.writer(f)
     
     f.write(f"# Config file used: {config_name}\n")
-    writer.writerow(["waveform","x","y","z","bval","signal"])
+    writer.writerow(["file","waveform","x","y","z","bval","signal"])
 
     shape_signals = []
     for filecount, file in enumerate(waveforms):
@@ -163,7 +164,7 @@ with open(csv_filename, mode="w", newline="") as f:
                 norm_signal = abs(signal / n_walkers)
                 
                 # Write a row to the CSV file
-                writer.writerow([filecount+1, bvec[0], bvec[1], bvec[2], b, norm_signal[i]])
+                writer.writerow([file, filecount+1, bvec[0], bvec[1], bvec[2], b, norm_signal[i]])
 
 
 

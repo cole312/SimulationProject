@@ -11,20 +11,19 @@ import numpy as np
     #config = tomli.load(f)
 
 #name = config["substrate"]["name"]
-name = "multiCylinder_radius10_height_500"
+name = "multiSphere_radiusMany"
 os.makedirs(f'substrate/{name}',exist_ok=True)
 
-mesh8 = trimesh.creation.cylinder(1,50)
-mesh2 = (trimesh.creation.cylinder(1,50)).apply_translation([3,0,0])
-mesh2.apply_transform(trimesh.transformations.rotation_matrix(np.radians(45), [1,0,0]))
-mesh3 = (trimesh.creation.cylinder(1,50)).apply_translation([0,3,0])
-mesh3.apply_transform(trimesh.transformations.rotation_matrix(np.radians(60), [1,1,0]))
-mesh4 = (trimesh.creation.cylinder(1,50)).apply_translation([0,-3,0])
-mesh4.apply_transform(trimesh.transformations.rotation_matrix(np.radians(30), [1,-1,0]))
-mesh5 = (trimesh.creation.cylinder(1,50)).apply_translation([-3,0,2])
-mesh5.apply_transform(trimesh.transformations.rotation_matrix(np.radians(90), [1,0,0]))
+#start mesh
+mesh8 = trimesh.creation.uv_sphere(1)
+mesh2 = trimesh.creation.uv_sphere(1.5).apply_translation([2.5,3,-3])
+mesh3 = trimesh.creation.uv_sphere(3).apply_translation([4,4,4])
+mesh4 = trimesh.creation.uv_sphere(2).apply_translation([-3,0,4])
+mesh5 = trimesh.creation.uv_sphere(2.5).apply_translation([0,6,2])
+mesh6 = trimesh.creation.uv_sphere(2).apply_translation([-2,-4,-2])
+mesh7 = trimesh.creation.uv_sphere(1.5).apply_translation([-4,4,-4])
 
-mesh = trimesh.util.concatenate([mesh8,mesh2,mesh3,mesh4,mesh5])
+mesh = trimesh.util.concatenate([mesh8,mesh2,mesh3,mesh4,mesh5,mesh6,mesh7])
 
 #end mesh
 

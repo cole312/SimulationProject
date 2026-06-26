@@ -4,16 +4,16 @@ import pandas as pd
 import os
 
 #Name mesh here
-name = 'test1'
+name = 'CATERPIllar_single_axon_run3'
 
 #make new directory for all outputs
-os.mkdir(f'substrate/{name}', exist_ok=True)
+os.makedirs(f'substrate/{name}', exist_ok=True)
 
 
 #Create mesh here
 meshs = []
 
-with open("CATERPillar_outputs/single_axon_run3.csv") as f:
+with open("CATERPillar_inputs/single_axon_run3.csv") as f:
     next(f)  # Skip the header line
 
     for line in f:

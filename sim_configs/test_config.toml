@@ -9,11 +9,11 @@ n_t = 1000
 
 [waveform]
 waveform_file = [
-    "gradients/waveform1.csv",
-    "gradients/waveform2.csv",
-    "gradients/waveform3.csv",
-    "gradients/waveform4.csv",
-    "gradients/waveform5.csv"
+    "gradients/LTE0hz.csv",
+    "gradients/LTE50hz.csv",
+    "gradients/LTE100hz.csv",
+    "gradients/STEiso.csv",
+    "gradients/STEaniso.csv"
 ]
 num_directions = 30
 num_b = 6
