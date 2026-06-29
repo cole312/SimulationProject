@@ -2,7 +2,7 @@
 #SBATCH --job-name=testslurm 
 #SBATCH --time=12:00:00
 #SBATCH --cpus-per-task=4
-#SBATCH --gpus-per-task=1 
+#SBATCH --gpus-per-node=1 
 #SBATCH --mem=16G
 #SBATCH --output=slurm-%j.out
 
