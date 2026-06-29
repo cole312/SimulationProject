@@ -1,5 +1,5 @@
 [substrate]
-name = "test"
+name = "beaded_axon_fiber5_bead8_length_200_spacing50"
 position = "intra"
 
 [simulation]
