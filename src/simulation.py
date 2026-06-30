@@ -39,8 +39,8 @@ position = config["substrate"]["position"]
 def get_substrate(meshName):
 
     print(meshName)
-    data_verts = pd.read_csv(f'substrate/{meshName}/{meshName}_vertices')
-    data_faces = pd.read_csv(f'substrate/{meshName}/{meshName}_faces')
+    data_verts = pd.read_csv(f'substrate/{meshName}/{meshName}_vertices.csv')
+    data_faces = pd.read_csv(f'substrate/{meshName}/{meshName}_faces.csv')
 
     vertices = data_verts.to_numpy()
     faces = data_faces.to_numpy()
