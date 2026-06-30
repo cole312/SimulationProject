@@ -12,9 +12,8 @@ parser.add_argument(
 )
 args = parser.parse_args()
 
-config_file_path = args.signals
+signal_file = args.signals
 
-signal_file = "test_signals_test_config"
 os.makedirs(f'graphOutputs/{signal_file}',exist_ok=True)
 output = f"graphOutputs/{signal_file}"
 
@@ -40,7 +39,7 @@ for wf in unique_waveforms:
     b_values = [0.0] + wf_data.index.tolist()
     signals = [1.0] + wf_data.values.tolist()
 
-    A, B, C = np.polyfit(b_values, signals, 2)
+    A, B, C = np.polyfit(b_values, np.log(signals), 2)
     D = -B
     
     md.append(D)
@@ -53,7 +52,7 @@ for wf in unique_waveforms:
     clean_filename = os.path.basename(raw_path) 
     label_name = clean_filename.replace(".csv", "") 
 
-    y_fit = A * (x_fit**2) + B * x_fit + C
+    y_fit = np.exp(A * (x_fit**2) + B * x_fit + C)
 
     ax.scatter(b_values, signals, marker='o', label=f"{label_name} Data")
     ax.plot(x_fit, y_fit, linestyle='--', label=f"Fit (MD: {D:.2e}, K: {kurt[-1]:.2f})")
@@ -118,7 +117,6 @@ plt.plot(x1,y2, ls= ":", alpha = 0.7)
 plt.plot(x1,y3, ls = ':', alpha= 0.7)
 
 plt.savefig(f"{output}/test1_fmd")
-
 
 
 
