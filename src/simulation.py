@@ -15,7 +15,7 @@ parser.add_argument(
     type=str,
 
 )
-args = parser.parse_parser_args() if hasattr(parser, 'parse_parser_args') else parser.parse_args()
+args = parser.parse_args()
 
 config_file_path = args.config
 

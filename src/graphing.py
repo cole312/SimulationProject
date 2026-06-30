@@ -2,6 +2,17 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument(
+    "signals",
+    type=str,
+
+)
+args = parser.parse_args()
+
+config_file_path = args.signals
 
 signal_file = "test_signals_test_config"
 os.makedirs(f'graphOutputs/{signal_file}',exist_ok=True)
