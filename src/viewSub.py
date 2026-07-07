@@ -4,30 +4,27 @@ from mpl_toolkits.mplot3d import Axes3D
 import os
 
 # 1. Paths to your files (change if names differ)
-substrate_file = "substrate/beaded_bundle_rfiber_0.337_rbead_1.000_VOL"
+substrate_file = "multiSphere_radiusMany"
 
-v_file = f"{substrate_file}_vertices.csv"
-f_file = f"{substrate_file}_faces.csv"
-output_png = f"{substrate_file}_view.png"
+v_file = f"substrate/{substrate_file}/{substrate_file}_vertices.csv"
+f_file = f"substrate/{substrate_file}/{substrate_file}_faces.csv"
+output_png = f"substrate/{substrate_file}/{substrate_file}_view.png"
 
-vertices = np.loadtxt(v_file, delimiter=",")
-faces = np.loadtxt(f_file, delimiter=",")
+vertices = np.loadtxt(v_file, delimiter=",",skiprows=1)
+faces = np.loadtxt(f_file, delimiter=",",skiprows=1)
 
-# 3. Create an off-screen 3D plot
 fig = plt.figure(figsize=(10, 8), dpi=150)
 ax = fig.add_subplot(111, projection='3d')
 
-# Render the surface mesh cleanly
 ax.plot_trisurf(
     vertices[:, 0], vertices[:, 1], vertices[:, 2], 
     triangles=faces, 
     cmap='viridis', 
-    edgecolor='black', 
-    linewidth=0.2, 
+    edgecolor='#88888822', 
+    linewidth=0.1, 
     alpha=0.9
 )
 
-# 4. Set equal aspect ratio so the axon beads don't look stretched or squished
 max_range = np.array([
     vertices[:, 0].max() - vertices[:, 0].min(),
     vertices[:, 1].max() - vertices[:, 1].min(),
@@ -48,7 +45,6 @@ ax.set_ylabel("Y (μm)")
 ax.set_zlabel("Z (μm)")
 ax.set_title("Beaded Axon Mesh Substrate")
 
-# 5. Export directly to a PNG file
-os.makedirs(os.path.dirname(output_png), exist_ok=True)
 plt.savefig(output_png, bbox_inches='tight')
+print(f"done, file saved to {output_png}")
 plt.close()

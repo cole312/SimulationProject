@@ -67,7 +67,7 @@ ax.grid(True, which="both", linestyle='--', alpha=0.5)
 ax.legend(bbox_to_anchor=(1.05, 1), loc='best')
 
 plt.tight_layout()
-plt.savefig(f"{output}/{graph_title}", dpi=300)
+plt.savefig(f"{output}/{graph_title}.png", dpi=300)
 
 fig, ax = plt.subplots(figsize=(8, 5))
 
