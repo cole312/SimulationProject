@@ -42,9 +42,8 @@ for wf in unique_waveforms:
 
     A, B, C = np.polyfit(b_values, np.log(signals), 2)
     D = -B
-    
-    md.append(D*1000)
     kurt.append((6 * A) / (D**2))
+    md.append(D*1000)
     curvesA.append(A)
     curvesB.append(B)
     curvesC.append(C)
@@ -72,7 +71,8 @@ plt.savefig(f"{output}/{graph_title}.png", dpi=300)
 fig, ax = plt.subplots(figsize=(8, 5))
 
 freq = np.array([0, 50, 100])
-diff = np.array([md[0], md[1], md[2]]) 
+diff = np.array([md[0], md[1], md[2]])
+print([md[0], md[1], md[2]])
 
 ax.scatter(freq, diff, color='red', marker='o', s=10, zorder=5, label='MD Data Points')
 
