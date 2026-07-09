@@ -20,9 +20,9 @@ output = f"graphOutputs/{signal_file}"
 
 df = pd.read_csv(f"outputs/{signal_file}", comment="#")
 
-df_averaged = df.groupby(['waveform', 'bval'])['signal'].mean()
+df_averaged = df.groupby(['waveform_idx', 'bval'])['signal'].mean()
 
-unique_waveforms = sorted(df['waveform'].unique())
+unique_waveforms = sorted(df['waveform_idx'].unique())
 
 md = []
 kurt = []
@@ -49,7 +49,7 @@ for wf in unique_waveforms:
     curvesB.append(B)
     curvesC.append(C)
 
-    raw_path = df[df['waveform'] == wf]['file'].iloc[0]
+    raw_path = df[df['waveform_idx'] == wf]['file'].iloc[0]
     clean_filename = os.path.basename(raw_path) 
     label_name = clean_filename.replace(".csv", "") 
 
@@ -67,7 +67,7 @@ ax.grid(True, which="both", linestyle='--', alpha=0.5)
 ax.legend(bbox_to_anchor=(1.05, 1), loc='best')
 
 plt.tight_layout()
-plt.savefig(f"{output}/{graph_title}", dpi=300)
+plt.savefig(f"{output}/{graph_title}.png", dpi=300)
 
 fig, ax = plt.subplots(figsize=(8, 5))
 

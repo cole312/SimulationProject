@@ -15,6 +15,7 @@ parser.add_argument(
     type=str,
 
 )
+
 args = parser.parse_args()
 
 config_file_path = args.config
@@ -31,10 +32,13 @@ n_walkers = config["simulation"]["n_walkers"]
 n_t = config["simulation"]["n_t"]
 diffusivity = config["simulation"]["diffusivity"]
 waveforms = config["waveform"]["waveform_file"]
-directions = config["waveform"]["num_directions"]
+eulerFile = config["waveform"]["direction_file"]
 b_num = config["waveform"]["num_b"]
 position = config["substrate"]["position"]
 
+rotations = np.loadtxt(f"euler_rotations/{eulerFile}", comments="#")
+rot_matrix = rotations.reshape(-1, 3, 3)
+print(rot_matrix)
 
 def get_substrate(meshName):
 
@@ -89,7 +93,7 @@ with open(csv_filename, mode="w", newline="") as f:
     writer = csv.writer(f)
     
     f.write(f"# Config file used: {config_name}\n")
-    writer.writerow(["file","waveform_idx","x","y","z","bval","signal"])
+    writer.writerow(["file", "waveform_idx", "R11", "R12", "R13", "R21", "R22", "R23", "R31", "R32", "R33", "bval", "signal"])
 
     shape_signals = []
     for filecount, file in enumerate(waveforms):
@@ -110,19 +114,13 @@ with open(csv_filename, mode="w", newline="") as f:
 
         print(f"Bval: {(gradients.calc_b(gradient,0.02e-3)*1e-6)[0]:.0f}")
 
-        #30 equally spaced points around a sphere. These are target vectors for the rotation
-        bvecs = fibonacci_sphere(n_points=directions)
+        
 
-        gradient_final = np.zeros([len(bvecs), len(time_points), 3])
+        gradient_final = np.zeros([len(rot_matrix), len(time_points), 3])
 
-        for i in range(0, len(bvecs)):
+        for i in range(0, len(rot_matrix)):
 
-            target = bvecs[i]
-
-            rotation, _ = R.align_vectors([target], [1,0,0])
-            rot_matrix = rotation.as_matrix()
-
-            rot_waveform = gradient @ rot_matrix.T
+            rot_waveform = gradient @ rot_matrix[i].T
 
             gradient_final[i, : , : ] = rot_waveform
 
@@ -158,12 +156,12 @@ with open(csv_filename, mode="w", newline="") as f:
             )
             
             # Loop through each direction to log its specific x, y, z component and signal.
-            for i, bvec in enumerate(bvecs):
+            for i in range(len(rot_matrix)):
 
                 norm_signal = abs(signal / n_walkers)
                 
                 # Write a row to the CSV file
-                writer.writerow([file, filecount+1, bvec[0], bvec[1], bvec[2], b, norm_signal[i]])
+                writer.writerow([file, filecount+1, *rotations[i], b, norm_signal[i]])
 
 
 
