@@ -1,0 +1,19 @@
+[substrate]
+name = "beaded_bundle_rfiber_0.600_rbead_0.600_VOL"
+position = "extra"
+
+[simulation]
+diffusivity = 1e-9
+n_walkers = 1000000
+n_t = 10000
+
+[waveform]
+waveform_file = [
+    "gradients/LTE0hz.csv",
+    "gradients/LTE50hz.csv",
+    "gradients/LTE100hz.csv",
+    "gradients/STEiso.csv",
+    "gradients/STEaniso.csv"
+]
+direction_file = "ESRD2_0040.txt"
+num_b = 6
