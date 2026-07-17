@@ -4,11 +4,12 @@
 #SBATCH --cpus-per-task=4
 #SBATCH --gpus-per-node=1 
 #SBATCH --mem=16G
-#SBATCH --output=/nfs/scratch/choover/SimulationProject/slurm_outputs/slurm-%j.out
+#SBATCH --output=/nfs/scratch/choover/SimulationProject2/slurm_outputs/slurm-%j.out
 #SBATCH --partition=hx
 
 # Run computation
-cd /nfs/scratch/choover/SimulationProject/
-pixi run python src/simulation.py sim_configs/test_config.toml
+cd /nfs/scratch/choover/SimulationProject2/
+
+pixi run python src/simulation_euler.py sim_configs/config_euler_intra.toml
 
 

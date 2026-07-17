@@ -4,7 +4,7 @@
 #SBATCH --cpus-per-task=4
 #SBATCH --gpus-per-node=1 
 #SBATCH --mem=16G
-#SBATCH --output=/nfs/scratch/choover/SimulationProject/slurm_outputs/slurm-%j.out
+#SBATCH --output=/nfs/scratch/choover/SimulationProject2/slurm_outputs/slurm-%j.out
 #SBATCH --partition=hx
 
 # Run computation
