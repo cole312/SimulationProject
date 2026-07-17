@@ -110,8 +110,7 @@ with open(csv_filename, mode="w", newline="") as f:
 
         print(f"Bval: {(gradients.calc_b(gradient,0.02e-3)*1e-6)[0]:.0f}")
 
-        bvecs = [0,1,0]
-    
+        bvecs = [[0,1,0]]
 
         gradient_final = np.zeros([len(bvecs), len(time_points), 3])
 
