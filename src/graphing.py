@@ -40,7 +40,7 @@ for wf in unique_waveforms:
     b_values = [0.0] + wf_data.index.tolist()
     signals = [1.0] + wf_data.values.tolist()
 
-    A, B, C= np.polyfit(b_values, np.log(signals), 2)
+    A, B, C = np.polyfit(b_values, np.log(signals), 2)
     D = -B
     kurt.append((6 * A) / (D**2))
     md.append(D*1000)
@@ -55,7 +55,7 @@ for wf in unique_waveforms:
     y_fit = np.exp(A * (x_fit**2) + B * x_fit + C)
 
     ax.scatter(b_values, signals, marker='o', label=f"{label_name} Data")
-    ax.plot(x_fit, y_fit, linestyle='--', label=f"Fit (MD: {md[-1]:.2e}, K: {kurt[-1]:.2f})")
+    ax.plot(x_fit, y_fit, linestyle='--', label=f"Fit (MD: {md[-1]:.4e}, K: {kurt[-1]:.4f})")
 
 ax.set_yscale('log')
 ax.set_xlabel("b-value ($s/mm^2$)")
