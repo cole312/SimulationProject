@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-n_cylinders = 200
+n_cylinders = 50
 cyl_radius = 0.5
 cyl_height = 10.0
 domain_size = 30.0 
@@ -69,8 +69,8 @@ combined_mesh.apply_scale(1e-6)
 
 
 data_vertices = pd.DataFrame(combined_mesh.vertices, columns=['x', 'y', 'z'])
-data_vertices.to_csv(f'{output_dir}/substrate_vertices.csv', index=False)
+data_vertices.to_csv(f'{output_dir}/{n_cylinders}_cylindersUP_vertices.csv', index=False)
 data_faces = pd.DataFrame(combined_mesh.faces, columns=['v1', 'v2', 'v3'])
-data_faces.to_csv(f'{output_dir}/substrate_faces.csv', index=False)
+data_faces.to_csv(f'{output_dir}/{n_cylinders}_cylindersUP_faces.csv', index=False)
 
 print(f"done")
