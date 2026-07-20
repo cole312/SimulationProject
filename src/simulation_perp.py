@@ -163,7 +163,3 @@ with open(csv_filename, mode="w", newline="") as f:
                 
                 # Write a row to the CSV file
                 writer.writerow([file, filecount+1, bvec[0], bvec[1], bvec[2], b, norm_signal[i]])
-
-
-
-
