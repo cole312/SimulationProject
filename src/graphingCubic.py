@@ -60,7 +60,7 @@ for wf in unique_waveforms:
     y_fit = np.exp(A * (x_fit**3) + B * (x_fit**2) + C * x_fit + S_int)
 
     ax.scatter(b_values, signals, marker='o', label=f"{label_name} Data")
-    ax.plot(x_fit, y_fit, linestyle='--', label=f"Fit (MD: {md[-1]:.2e}, K: {kurt[-1]:.2f})")
+    ax.plot(x_fit, y_fit, linestyle='--', label=f"Fit (MD: {md[-1]:.4e}, K: {kurt[-1]:.4f})")
 
 ax.set_yscale('log')
 ax.set_xlabel("b-value ($s/mm^2$)")
