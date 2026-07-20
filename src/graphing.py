@@ -43,7 +43,7 @@ for wf in unique_waveforms:
     b_arr = np.array(b_values)
     signals_arr = np.array(signals)
 
-    mask = b_arr <= 2000
+    mask = b_arr <= 10000
     b_mask = b_arr[mask]
     signals_mask = signals_arr[mask]
 
