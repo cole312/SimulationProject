@@ -40,10 +40,15 @@ for wf in unique_waveforms:
     b_values = [0.0] + wf_data.index.tolist()
     signals = [1.0] + wf_data.values.tolist()
 
-    A, B, C= np.polyfit(b_values, np.log(signals), 2)
-    D = -B
-    kurt.append((6 * A) / (D**2))
-    md.append(D*1000)
+    A, B, C, S_int = np.polyfit(b_values, np.log(signals), 3)
+    
+    D = -C
+ 
+    kurt_val = (6 * B) / (D**2)
+    
+    kurt.append(kurt_val)
+    md.append(D * 1000) 
+    
     curvesA.append(A)
     curvesB.append(B)
     curvesC.append(C)
@@ -52,7 +57,7 @@ for wf in unique_waveforms:
     clean_filename = os.path.basename(raw_path) 
     label_name = clean_filename.replace(".csv", "") 
 
-    y_fit = np.exp(A * (x_fit**2) + B * x_fit + C)
+    y_fit = np.exp(A * (x_fit**3) + B * (x_fit**2) + C * x_fit + S_int)
 
     ax.scatter(b_values, signals, marker='o', label=f"{label_name} Data")
     ax.plot(x_fit, y_fit, linestyle='--', label=f"Fit (MD: {md[-1]:.2e}, K: {kurt[-1]:.2f})")
@@ -66,7 +71,7 @@ ax.grid(True, which="both", linestyle='--', alpha=0.5)
 ax.legend(bbox_to_anchor=(1.05, 1), loc='best')
 
 plt.tight_layout()
-plt.savefig(f"{output}/{graph_title}.png", dpi=300)
+plt.savefig(f"{output}/cubic_{graph_title}.png", dpi=300)
 
 fig, ax = plt.subplots(figsize=(8, 5))
 
@@ -117,5 +122,5 @@ ax.grid(True, which="both", linestyle='--', alpha=0.5)
 ax.legend(loc='best')
 
 plt.tight_layout()
-plt.savefig(f"{output}/{graph_title}_fmd.png", dpi=300)
+plt.savefig(f"{output}/cubic_{graph_title}_fmd.png", dpi=300)
 plt.show()
