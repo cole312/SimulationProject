@@ -40,7 +40,14 @@ for wf in unique_waveforms:
     b_values = [0.0] + wf_data.index.tolist()
     signals = [1.0] + wf_data.values.tolist()
 
-    A, B, C = np.polyfit(b_values, np.log(signals), 2)
+    b_arr = np.array(b_values)
+    signals_arr = np.array(signals)
+
+    mask = b_arr <= 2000
+    b_mask = b_arr[mask]
+    signals_mask = signals_arr[mask]
+
+    A, B, C = np.polyfit(b_mask, np.log(signals_mask), 2)
     D = -B
     kurt.append((6 * A) / (D**2))
     md.append(D*1000)
