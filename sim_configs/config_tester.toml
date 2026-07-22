@@ -1,0 +1,19 @@
+[substrate]
+name = "1_cylindersUP"
+position = "intra"
+
+[simulation]
+diffusivity = 1e-9
+n_walkers = 100
+n_t = 100
+
+[waveform]
+waveform_file = [
+    "gradients/LTE0hz.csv",
+    "gradients/LTE50hz.csv",
+    "gradients/LTE100hz.csv",
+    "gradients/STEiso.csv",
+    "gradients/STEaniso.csv"
+]
+direction_file = "GFOD2_0040.txt"
+num_b = 6
