@@ -9,11 +9,7 @@ n_t = 100
 
 [waveform]
 waveform_file = [
-    "gradients/LTE0hz.csv",
-    "gradients/LTE50hz.csv",
-    "gradients/LTE100hz.csv",
-    "gradients/STEiso.csv",
-    "gradients/STEaniso.csv"
+    "gradients/test.csv"
 ]
 direction_file = "GFOD2_0040.txt"
 num_b = 6

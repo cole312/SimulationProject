@@ -116,14 +116,27 @@ with open(csv_filename, mode="w", newline="") as f:
 
         for i in range(0, len(rot_matrix)):
 
+
             rot_waveform = gradient @ rot_matrix[i].T
 
             gradient_final[i, : , : ] = rot_waveform
 
+            np.set_printoptions(threshold=np.inf)
+
+            print(f"\n\nrotation matrix for index {i}: \n {rot_matrix[i]}")
+
+            print(f"gradient x: \n{gradient[0,:,0]}" )
+            print(f"gradient y: \n{gradient[0,:,1]}" )
+            print(f"gradient z: \n{gradient[0,:,2]}" )
+
+            print(f"rot gradient x:\n {rot_waveform[0,:,0]}" )
+            print(f"rot gradient y:\n {rot_waveform[0,:,1]}" )
+            print(f"rot gradient z: \n{rot_waveform[0,:,2]}\n\n" )
+
         gradient_final, dt = gradients.interpolate_gradient(gradient_final, 0.02e-3, int(n_t))
         
         b_base = (gradients.calc_b(gradient_final, dt) * 1e-6)
-        print(f"B-base: {b_base[0]}")
+        print(f"B-base: {b_base}")
 
         signals = []
         b_targets = np.linspace(0, 4500, b_num) 
@@ -136,6 +149,8 @@ with open(csv_filename, mode="w", newline="") as f:
 
             scale = np.sqrt(b / b_base[0])
             scaled_gradient = gradient_final * scale
+            b_vals = gradients.calc_b(scaled_gradient, dt) * 1e-6
+            print(f"Bval target {b}: min={b_vals.min():.5f}, max={b_vals.max():.5f}")
 
             mega_gradient.append(scaled_gradient)
 
