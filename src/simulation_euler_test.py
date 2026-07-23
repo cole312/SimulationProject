@@ -9,6 +9,10 @@ import csv
 import os
 import argparse
 
+seed = np.random.randint(0, 2**32-1)
+print(seed)
+
+
 parser = argparse.ArgumentParser()
 parser.add_argument(
     "config",
@@ -65,9 +69,7 @@ def get_substrate(meshName):
     substrate = substrates.mesh(
         vertices,
         faces,
-        periodic=True,
-        n_sv=np.array([10, 10, 50]),
-        quiet= False,
+        periodic=False,
         init_pos=position
     )
 
@@ -97,7 +99,8 @@ def read_shape(filename):
     return x_grad,y_grad,z_grad
 
 
-substrate = get_substrate(meshName)
+#substrate = get_substrate(meshName)
+substrate = substrates.free()
 
 csv_filename = get_unique_filepath(
     f"outputs/{meshName}_signals_{config_name}.csv"
@@ -107,6 +110,7 @@ with open(csv_filename, mode="w", newline="") as f:
     writer = csv.writer(f)
     
     f.write(f"# Config file used: {config_name}\n")
+    f.write(f"# MC seed: {seed}\n")
     writer.writerow(["file", "waveform_idx", "R11", "R12", "R13", "R21", "R22", "R23", "R31", "R32", "R33", "bval", "signal"])
 
     shape_signals = []
@@ -165,7 +169,11 @@ with open(csv_filename, mode="w", newline="") as f:
         gradient=mega_gradient,
         dt=dt,
         substrate=substrate,
+        seed=seed
         )
+
+        print(signal.dtype)
+        print(signal[:5])
         
         norm_signal = abs(signal / n_walkers)
 

@@ -15,5 +15,5 @@ waveform_file = [
     "gradients/STEiso.csv",
     "gradients/STEaniso.csv"
 ]
-direction_file = "GFOD2_0040.txt"
-num_b = 6
+direction_file = "GFOD2_0100.txt"
+num_b = 20
