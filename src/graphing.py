@@ -37,8 +37,8 @@ x_fit = np.linspace(0, max(df['bval']), 100)
 for wf in unique_waveforms:
     wf_data = df_averaged.loc[wf]
 
-    b_values = [0.0] + wf_data.index.tolist()
-    signals = [1.0] + wf_data.values.tolist()
+    b_values = wf_data.index.tolist()
+    signals = wf_data.values.tolist()
 
     b_arr = np.array(b_values)
     signals_arr = np.array(signals)
