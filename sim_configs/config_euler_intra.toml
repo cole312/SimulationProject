@@ -1,5 +1,5 @@
 [substrate]
-name = "beaded_bundle_rfiber_0.600_rbead_0.600_VOL"
+name = "200_cylindersUP"
 position = "intra"
 
 [simulation]
@@ -15,5 +15,5 @@ waveform_file = [
     "gradients/STEiso.csv",
     "gradients/STEaniso.csv"
 ]
-direction_file = "ESRD2_0040.txt"
-num_b = 6
+direction_file = "ESRD2_0100.txt"
+num_b = 100
