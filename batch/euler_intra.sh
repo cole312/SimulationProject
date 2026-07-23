@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=testslurm 
+#SBATCH --job-name=int 
 #SBATCH --time=12:00:00
 #SBATCH --cpus-per-task=4
 #SBATCH --gpus-per-node=1 

@@ -121,18 +121,6 @@ with open(csv_filename, mode="w", newline="") as f:
 
             gradient_final[i, : , : ] = rot_waveform
 
-            np.set_printoptions(threshold=np.inf)
-
-            print(f"\n\nrotation matrix for index {i}: \n {rot_matrix[i]}")
-
-            print(f"gradient x: \n{gradient[0,:,0]}" )
-            print(f"gradient y: \n{gradient[0,:,1]}" )
-            print(f"gradient z: \n{gradient[0,:,2]}" )
-
-            print(f"rot gradient x:\n {rot_waveform[0,:,0]}" )
-            print(f"rot gradient y:\n {rot_waveform[0,:,1]}" )
-            print(f"rot gradient z: \n{rot_waveform[0,:,2]}\n\n" )
-
         gradient_final, dt = gradients.interpolate_gradient(gradient_final, 0.02e-3, int(n_t))
         
         b_base = (gradients.calc_b(gradient_final, dt) * 1e-6)
