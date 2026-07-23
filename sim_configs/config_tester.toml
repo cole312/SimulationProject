@@ -1,5 +1,5 @@
 [substrate]
-name = "1_cylindersUP"
+name = "sphereRadius_5.0"
 position = "intra"
 
 [simulation]
@@ -9,7 +9,11 @@ n_t = 100
 
 [waveform]
 waveform_file = [
-    "gradients/test.csv"
+    "gradients/LTE0hz.csv",
+    "gradients/LTE50hz.csv",
+    "gradients/LTE100hz.csv",
+    "gradients/STEiso.csv",
+    "gradients/STEaniso.csv"
 ]
 direction_file = "GFOD2_0040.txt"
 num_b = 6

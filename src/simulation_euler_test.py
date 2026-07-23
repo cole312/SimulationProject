@@ -39,6 +39,20 @@ position = config["substrate"]["position"]
 rotations = np.loadtxt(f"euler_rotations/{eulerFile}", comments="#")
 rot_matrix = rotations.reshape(-1, 3, 3)
 
+def get_unique_filepath(filepath):
+    if not os.path.exists(filepath):
+        return filepath
+
+    base, ext = os.path.splitext(filepath)
+    counter = 1
+    new_filepath = f"{base}_{counter}{ext}"
+
+    while os.path.exists(new_filepath):
+        counter += 1
+        new_filepath = f"{base}_{counter}{ext}"
+
+    return new_filepath
+
 def get_substrate(meshName):
 
     print(meshName)
@@ -84,8 +98,10 @@ def read_shape(filename):
 
 
 substrate = get_substrate(meshName)
-os.makedirs("traj_files", exist_ok=True)
-csv_filename=f"outputs/{meshName}_signals_{config_name}.csv"
+
+csv_filename = get_unique_filepath(
+    f"outputs/{meshName}_signals_{config_name}.csv"
+)
 
 with open(csv_filename, mode="w", newline="") as f:
     writer = csv.writer(f)
@@ -124,8 +140,6 @@ with open(csv_filename, mode="w", newline="") as f:
         gradient_final, dt = gradients.interpolate_gradient(gradient_final, 0.02e-3, int(n_t))
         
         b_base = (gradients.calc_b(gradient_final, dt) * 1e-6)
-        print(f"B-base: {b_base}")
-
         signals = []
         b_targets = np.linspace(0, 4500, b_num) 
 
@@ -138,13 +152,12 @@ with open(csv_filename, mode="w", newline="") as f:
             scale = np.sqrt(b / b_base[0])
             scaled_gradient = gradient_final * scale
             b_vals = gradients.calc_b(scaled_gradient, dt) * 1e-6
-            print(f"Bval target {b}: min={b_vals.min():.5f}, max={b_vals.max():.5f}")
 
             mega_gradient.append(scaled_gradient)
 
         mega_gradient = np.concatenate(mega_gradient, axis=0)
 
-        print(f"Running mega simulation for waveform: {file}")
+        print(f"\n\nRunning mega simulation for waveform: {file}")
 
         signal = simulations.simulation(
         n_walkers=int(n_walkers),
@@ -156,8 +169,6 @@ with open(csv_filename, mode="w", newline="") as f:
         
         norm_signal = abs(signal / n_walkers)
 
-        print(norm_signal)
-
         signal_idx = 0
         for b in b_targets:
             if b == 0:
@@ -167,6 +178,8 @@ with open(csv_filename, mode="w", newline="") as f:
                 for i in range(len(rot_matrix)):
                     writer.writerow([file, filecount + 1, *rotations[i], b, norm_signal[signal_idx]])
                     signal_idx += 1
+print(f"Writing outputs to: {csv_filename}")
+
 
 
 
