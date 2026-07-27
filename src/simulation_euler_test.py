@@ -101,8 +101,7 @@ def read_shape(filename):
     return x_grad,y_grad,z_grad
 
 
-#substrate = get_substrate(meshName)
-substrate = substrates.sphere(radius=2.5e-6)
+substrate = get_substrate(meshName)
 
 csv_filename = get_unique_filepath(
     f"outputs/{meshName}_signals_{config_name}.csv"
