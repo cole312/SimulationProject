@@ -204,16 +204,25 @@ with open(csv_filename, mode="w", newline="") as f:
     )
     
     norm_signal = abs(signal / n_walkers)
-
-    signal_idx = 0
     
-    for i, row in enumerate(metadata):
-        writer.writerow(
-            [
-            *row,
-            norm_signal[i]
-            ]
-        )
+    signal_idx = 0
+
+    for row in metadata:
+        if row[-1] == 0:
+            writer.writerow(
+                [
+                *row,
+                1.0
+                ]
+            )
+        else:
+            writer.writerow(
+                [
+                *row,
+                norm_signal[signal_idx]
+                ]
+            )
+            signal_idx += 1
         
 print(f"Writing outputs to: {csv_filename}")
 
