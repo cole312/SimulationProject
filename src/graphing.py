@@ -44,7 +44,7 @@ for wf in unique_waveforms:
     signals_arr = np.array(signals)
 
         
-    do = True:
+    do = True
 
     if do:
         print(wf_data)
