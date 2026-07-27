@@ -5,7 +5,7 @@ position = "intra"
 [simulation]
 diffusivity = 1e-9
 n_walkers = 100
-n_t = 100
+n_t = 100000
 
 [waveform]
 waveform_file = [

@@ -36,7 +36,7 @@ eulerFile = config["waveform"]["direction_file"]
 b_num = config["waveform"]["num_b"]
 position = config["substrate"]["position"]
 
-rotations = np.loadtxt(f"euler_rotations/{eulerFile}", comments="#")
+rotations = np.loadtxt(f"rotations/{eulerFile}", comments="#")
 rot_matrix = rotations.reshape(-1, 3, 3)
 print(rot_matrix)
 

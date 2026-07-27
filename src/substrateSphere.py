@@ -42,6 +42,4 @@ for radius in np.arange(0.5,10.1,0.5):
     data_faces = pd.DataFrame(mesh.faces, columns=['v1', 'v2', 'v3'])
     data_faces.to_csv(f'{output_dir}/{name}_faces.csv', index=False)
 
-    
-
     print("\nSucess.")

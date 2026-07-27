@@ -12,7 +12,6 @@ import argparse
 seed = np.random.randint(0, 2**32-1)
 print(seed)
 
-
 parser = argparse.ArgumentParser()
 parser.add_argument(
     "config",
@@ -37,11 +36,14 @@ n_t = config["simulation"]["n_t"]
 diffusivity = config["simulation"]["diffusivity"]
 waveforms = config["waveform"]["waveform_file"]
 eulerFile = config["waveform"]["direction_file"]
+fibFile = config["waveform"]["direction_file_fib"]
 b_num = config["waveform"]["num_b"]
 position = config["substrate"]["position"]
 
-rotations = np.loadtxt(f"euler_rotations/{eulerFile}", comments="#")
+rotations = np.loadtxt(f"rotations/{eulerFile}", comments="#")
+rotationsFib = np.loadtxt(f"rotations/{fibFile}", comments="#")
 rot_matrix = rotations.reshape(-1, 3, 3)
+rot_matrixFib = rotationsFib.reshape(-1, 3, 3)
 
 def get_unique_filepath(filepath):
     if not os.path.exists(filepath):
@@ -116,6 +118,13 @@ with open(csv_filename, mode="w", newline="") as f:
     shape_signals = []
     for filecount, file in enumerate(waveforms):
 
+        if filecount <= 2:
+            curr_matrix = rot_matrixFib
+            print("fib rotation used")
+        else:
+            curr_matrix = rot_matrix
+            print("euler rotation used")
+
         x_grad, y_grad, z_grad = read_shape(file)
         
         time = len(x_grad)*0.02
@@ -131,26 +140,23 @@ with open(csv_filename, mode="w", newline="") as f:
 
         print(f"Bval: {(gradients.calc_b(gradient,0.02e-3)*1e-6)[0]:.0f}")
 
-        gradient_final = np.zeros([len(rot_matrix), len(time_points), 3])
+        gradient_final = np.zeros([len(curr_matrix), len(time_points), 3])
         mega_gradient = []
 
-        for i in range(0, len(rot_matrix)):
+        for i in range(0, len(curr_matrix)):
 
-
-            rot_waveform = gradient @ rot_matrix[i].T
+            rot_waveform = gradient @ curr_matrix[i].T
 
             gradient_final[i, : , : ] = rot_waveform
 
         gradient_final, dt = gradients.interpolate_gradient(gradient_final, 0.02e-3, int(n_t))
         
         b_base = (gradients.calc_b(gradient_final, dt) * 1e-6)
-        signals = []
         b_targets = np.linspace(0, 4500, b_num) 
 
         #Scale gradient values to achieve different b's. Scale is calcuated via b_base
         for j, b in enumerate(b_targets):
             if b == 0:
-                signals.append(n_walkers) 
                 continue
 
             scale = np.sqrt(b / b_base[0])
@@ -171,21 +177,21 @@ with open(csv_filename, mode="w", newline="") as f:
         substrate=substrate,
         seed=seed
         )
-
-        print(signal.dtype)
-        print(signal[:5])
         
         norm_signal = abs(signal / n_walkers)
 
         signal_idx = 0
+        
         for b in b_targets:
             if b == 0:
-                for i in range(len(rot_matrix)):
-                    writer.writerow([file, filecount + 1, *rotations[i], b, 1.0])
+                for i in range(len(curr_matrix)):
+                    writer.writerow([file, filecount + 1, *curr_matrix[i].flatten(), b, 1.0])
             else:
-                for i in range(len(rot_matrix)):
-                    writer.writerow([file, filecount + 1, *rotations[i], b, norm_signal[signal_idx]])
+                for i in range(len(curr_matrix)):
+                    writer.writerow([file, filecount + 1, *curr_matrix[i].flatten(), b, norm_signal[signal_idx]])
                     signal_idx += 1
+
+            
 print(f"Writing outputs to: {csv_filename}")
 
 
