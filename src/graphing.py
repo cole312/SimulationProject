@@ -43,14 +43,6 @@ for wf in unique_waveforms:
     b_arr = np.array(b_values)
     signals_arr = np.array(signals)
 
-        
-    do = True
-
-    if do:
-        print(wf_data)
-        print(b_values)
-        print(signals)
-        do == False
 
     mask = b_arr <= 10000
     b_mask = b_arr[mask]
@@ -63,6 +55,14 @@ for wf in unique_waveforms:
     curvesA.append(A)
     curvesB.append(B)
     curvesC.append(C)
+
+
+    print(wf)
+    print(wf_data)
+    print(A)
+    print(B)
+    print(C)
+    print((6 * A) / (D**2))
 
     raw_path = df[df['waveform_idx'] == wf]['file'].iloc[0]
     clean_filename = os.path.basename(raw_path) 
