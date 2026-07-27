@@ -115,14 +115,16 @@ with open(csv_filename, mode="w", newline="") as f:
     writer.writerow(["file", "waveform_idx", "R11", "R12", "R13", "R21", "R22", "R23", "R31", "R32", "R33", "bval", "signal"])
 
     shape_signals = []
+    mega_gradient = []
+    metadata = []
+
+
     for filecount, file in enumerate(waveforms):
 
         if filecount <= 2:
             curr_matrix = rot_matrixFib
-            print("fib rotation used")
         else:
             curr_matrix = rot_matrix
-            print("euler rotation used")
 
         x_grad, y_grad, z_grad = read_shape(file)
         
@@ -140,7 +142,6 @@ with open(csv_filename, mode="w", newline="") as f:
         print(f"Bval: {(gradients.calc_b(gradient,0.02e-3)*1e-6)[0]:.0f}")
 
         gradient_final = np.zeros([len(curr_matrix), len(time_points), 3])
-        mega_gradient = []
 
         for i in range(0, len(curr_matrix)):
 
@@ -156,6 +157,15 @@ with open(csv_filename, mode="w", newline="") as f:
         #Scale gradient values to achieve different b's. Scale is calcuated via b_base
         for j, b in enumerate(b_targets):
             if b == 0:
+                for i in range(len(curr_matrix)):
+                    metadata.append(
+                        [
+                            file,
+                            filecount + 1,
+                            *curr_matrix[i].flatten(),
+                            b
+                        ]
+                    )
                 continue
 
             scale = np.sqrt(b / b_base[0])
@@ -164,33 +174,47 @@ with open(csv_filename, mode="w", newline="") as f:
 
             mega_gradient.append(scaled_gradient)
 
-        mega_gradient = np.concatenate(mega_gradient, axis=0)
+            for i in range(len(curr_matrix)):
+                metadata.append(
+                    [
+                    file,
+                    filecount + 1,
+                    *curr_matrix[i].flatten(),
+                    b
+                    ]
+                )
 
-        print(f"\n\nRunning mega simulation for waveform: {file}")
+    mega_gradient = np.concatenate(mega_gradient, axis=0)
 
-        signal = simulations.simulation(
-        n_walkers=int(n_walkers),
-        diffusivity=diffusivity,
-        gradient=mega_gradient,
-        dt=dt,
-        substrate=substrate,
-        seed=seed
+
+
+    print("Mega gradient shape:", mega_gradient.shape)
+
+    print("Metadata entries:", len(metadata))
+
+    print(f"\n\nRunning mega simulation.")
+
+    signal = simulations.simulation(
+    n_walkers=int(n_walkers),
+    diffusivity=diffusivity,
+    gradient=mega_gradient,
+    dt=dt,
+    substrate=substrate,
+    seed=seed
+    )
+    
+    norm_signal = abs(signal / n_walkers)
+
+    signal_idx = 0
+    
+    for i, row in enumerate(metadata):
+        writer.writerow(
+            [
+            *row,
+            norm_signal[i]
+            ]
         )
         
-        norm_signal = abs(signal / n_walkers)
-
-        signal_idx = 0
-        
-        for b in b_targets:
-            if b == 0:
-                for i in range(len(curr_matrix)):
-                    writer.writerow([file, filecount + 1, *curr_matrix[i].flatten(), b, 1.0])
-            else:
-                for i in range(len(curr_matrix)):
-                    writer.writerow([file, filecount + 1, *curr_matrix[i].flatten(), b, norm_signal[signal_idx]])
-                    signal_idx += 1
-
-            
 print(f"Writing outputs to: {csv_filename}")
 
 
