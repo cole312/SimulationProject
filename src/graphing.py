@@ -49,7 +49,7 @@ for wf in unique_waveforms:
     signals_mask = signals_arr[mask]
 
     A, B, C = np.polyfit(b_mask, np.log(signals_mask), 2)
-    if abs(A) < 1e-9:
+    if abs(A) < 1e-8:
         A = 0
 
 
