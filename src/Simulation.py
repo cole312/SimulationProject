@@ -112,6 +112,11 @@ with open(csv_filename, mode="w", newline="") as f:
     
     f.write(f"# Config file used: {config_name}\n")
     f.write(f"# MC seed: {seed}\n")
+    f.write(f"# Subtrate: {meshName}\n")
+    f.write(f"# Walkers: {n_walkers}. Steps: {n_t}\n")
+    f.write(f"# Position: {position}\n")
+    f.write(f"# Diffusivity: {diffusivity}\n")
+
     writer.writerow(["file", "waveform_idx", "R11", "R12", "R13", "R21", "R22", "R23", "R31", "R32", "R33", "bval", "signal"])
 
     shape_signals = []
@@ -223,7 +228,13 @@ with open(csv_filename, mode="w", newline="") as f:
                 ]
             )
             signal_idx += 1
-        
+
+print(f"# MC seed: {seed}\n")
+print(f"# Subtrate: {meshName}")
+print(f"# Walkers: {n_walkers}. Steps: {n_t}")
+print(f"# Position: {position}")
+print(f"# Diffusivity: {diffusivity}\n")
+
 print(f"Writing outputs to: {csv_filename}")
 
 
