@@ -52,17 +52,19 @@ for wf in unique_waveforms:
     D = -B
     kurt.append((6 * A) / (D**2))
     md.append(D*1000)
+    if abs(A) < 1e-9:
+        A = 0
     curvesA.append(A)
     curvesB.append(B)
     curvesC.append(C)
-
-
-    print(wf)
+ 
     print(wf_data)
     print(A)
     print(B)
     print(C)
     print((6 * A) / (D**2))
+
+
 
     raw_path = df[df['waveform_idx'] == wf]['file'].iloc[0]
     clean_filename = os.path.basename(raw_path) 
