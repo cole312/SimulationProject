@@ -49,11 +49,14 @@ for wf in unique_waveforms:
     signals_mask = signals_arr[mask]
 
     A, B, C = np.polyfit(b_mask, np.log(signals_mask), 2)
+    if abs(A) < 1e-9:
+        A = 0
+
+
     D = -B
     kurt.append((6 * A) / (D**2))
     md.append(D*1000)
-    if abs(A) < 1e-9:
-        A = 0
+
     curvesA.append(A)
     curvesB.append(B)
     curvesC.append(C)
