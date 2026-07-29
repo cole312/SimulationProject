@@ -230,20 +230,17 @@ with open(csv_filename, mode="w", newline="") as f:
             signal_idx += 1
 
 
-gradient_final2, dt2 = gradients.interpolate_gradient(gradient_final, 0.02e-3, 100)
-
 traj_file = get_unique_filepath(
-    f"outputs/traj_{meshName}_{config_name}.csv"
+    f"outputs/traj_{meshName}_signals_{config_name}.csv"
 )
-
 trajSignal = simulations.simulation(
-n_walkers=100,
+n_walkers=10,
 diffusivity=diffusivity,
 gradient=mega_gradient,
-dt=dt2,
+dt=dt,
 substrate=substrate,
 seed=seed,
-traj=traj_file,
+traj=traj_file
 )
 
 print(f"# MC seed: {seed}\n")

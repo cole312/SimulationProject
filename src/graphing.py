@@ -131,4 +131,27 @@ ax.legend(loc='best')
 
 plt.tight_layout()
 plt.savefig(f"{output}/{graph_title}_fmd.png", dpi=300)
-plt.show()
+
+print(f"outputs/traj_{signal_file}")
+
+data = np.loadtxt(f"outputs/traj_496_cylindersUP_extra_euler_config.csv")
+
+traj = data.reshape((-1, 100, 3)).transpose(1, 0, 2) 
+
+fig = plt.figure(figsize=(8, 8))
+ax = fig.add_subplot(111, projection='3d')
+
+for i in range(10): 
+        ax.plot(traj[i, :, 0], traj[i, :, 1], traj[i, :, 2], alpha=0.7, linewidth=0.3)
+
+
+ax.view_init(elev=90, azim=70)
+
+ax.set_title("Disimpy Trajectories")
+ax.set_ylabel("Y")
+ax.set_xlabel("X")
+ax.set_zlabel("Z")
+
+ax.set_aspect('equal')
+
+plt.savefig(f"{output}/{graph_title}_traj.png", dpi=300)
