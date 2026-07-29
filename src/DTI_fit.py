@@ -3,7 +3,15 @@ import pandas as pd
 from dipy.core.gradients import gradient_table
 from dipy.reconst import dti
 
-csv_file = "outputs/sphereRadius_5.0_signals_config_tester.csv"
+parser = argparse.ArgumentParser()
+parser.add_argument(
+    "signals",
+    type=str,
+
+)
+args = parser.parse_args()
+
+csv_file = args
 df = pd.read_csv(csv_file, comment="#")
 
 R_cols = ["R11", "R12", "R13", "R21", "R22", "R23", "R31", "R32", "R33"]
