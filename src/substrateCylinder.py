@@ -4,11 +4,11 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-n_cylinders = 1
+n_cylinders = 500
 cyl_radius = 0.5
 cyl_height = 10.0
 domain_size = 30
-output_dir = f"substrate/{n_cylinders}_cylinders_SIDE"
+output_dir = f"substrate/{n_cylinders}_cylindersUP"
 os.makedirs(output_dir, exist_ok=True)
 
 cylinder_list = []
@@ -32,11 +32,9 @@ for i in range(n_cylinders):
         y_pos = np.random.uniform(-domain_size/2, domain_size/2)
         
         if not is_overlapping(x_pos, y_pos, placed_positions, cyl_radius * 2.2):
-            rot_matrix = trimesh.transformations.rotation_matrix(np.radians(90), [0, 1, 0])
-            cyl = trimesh.creation.cylinder(radius=cyl_radius, height=cyl_height, transform=rot_matrix)
+            cyl = trimesh.creation.cylinder(radius=cyl_radius, height=cyl_height)
             cyl.apply_translation([x_pos, y_pos, 0])
 
-            
             cylinder_list.append(cyl)
             placed_positions.append((x_pos, y_pos))
             placed = True
