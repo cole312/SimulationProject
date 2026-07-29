@@ -49,7 +49,7 @@ for wf in unique_waveforms:
     signals_mask = signals_arr[mask]
 
     A, B, C = np.polyfit(b_mask, np.log(signals_mask), 2)
-    if abs(A) < 1e-8:
+    if abs(A) < 1e-9:
         A = 0
 
 
@@ -60,14 +60,6 @@ for wf in unique_waveforms:
     curvesA.append(A)
     curvesB.append(B)
     curvesC.append(C)
- 
-    print(wf_data)
-    print(A)
-    print(B)
-    print(C)
-    print((6 * A) / (D**2))
-
-
 
     raw_path = df[df['waveform_idx'] == wf]['file'].iloc[0]
     clean_filename = os.path.basename(raw_path) 
