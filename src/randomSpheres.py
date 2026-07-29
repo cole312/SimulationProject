@@ -4,13 +4,13 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-substrate_name = "spheres_3d_distribution_2_to_15_um"
+substrate_name = "spheres_3d_distribution_4_to_12_um"
 output_dir = f"substrate/{substrate_name}"
 os.makedirs(output_dir, exist_ok=True)
 
 np.random.seed(123) 
-num_spheres = 100
-radii = np.random.uniform(1, 12, num_spheres)
+num_spheres = 50
+radii = np.random.uniform(4, 12, num_spheres)
 
 box_size = 100
 buffer = 1.0 
@@ -88,10 +88,10 @@ ax.set_xlim(mid_x - max_range, mid_x + max_range)
 ax.set_ylim(mid_y - max_range, mid_y + max_range)
 ax.set_zlim(mid_z - max_range, mid_z + max_range)
 
-ax.set_xlabel("X (m)")
-ax.set_ylabel("Y (m)")
-ax.set_zlabel("Z (m)")
-ax.set_title("Non Overlapping 3D Random Sphere Substrate")
+ax.set_xlabel("X (um)")
+ax.set_ylabel("Y (um)")
+ax.set_zlabel("Z (uum)")
+ax.set_title("Non Overlapping 3D Random Sphere Substrate (4-12um)")
 
 plt.savefig(f'{output_dir}/{substrate_name}_mesh.png', dpi=300, bbox_inches='tight')
 plt.close(fig)
