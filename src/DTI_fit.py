@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 from dipy.core.gradients import gradient_table
 from dipy.reconst import dti
+import argparse
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
