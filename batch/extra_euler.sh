@@ -10,6 +10,6 @@
 # Run computation
 cd /nfs/scratch/choover/SimulationProject2/
 
-pixi run python src/Simulation.py extra_euler_config.toml
+pixi run python src/Simulation.py sim_configs/extra_euler_config.toml
 
 
