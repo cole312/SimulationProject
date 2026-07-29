@@ -12,7 +12,7 @@ parser.add_argument(
 )
 args = parser.parse_args()
 
-csv_file = args
+csv_file = args.signals
 df = pd.read_csv(csv_file, comment="#")
 
 R_cols = ["R11", "R12", "R13", "R21", "R22", "R23", "R31", "R32", "R33"]
