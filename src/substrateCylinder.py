@@ -4,11 +4,11 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-n_cylinders = 400
-cyl_radius = 0.5
+n_cylinders = 2000
+cyl_radius = 0.25
 cyl_height = 10.0
 domain_size = 30
-output_dir = f"substrate/{n_cylinders}_cylindersUP"
+output_dir = f"substrate/{n_cylinders}_cylinders_rad0.25"
 os.makedirs(output_dir, exist_ok=True)
 
 cylinder_list = []
@@ -44,7 +44,7 @@ for i in range(n_cylinders):
     if not placed:
         print(f"Warning: Could not place cylinder {i+1}")
 
-
+print(len(cylinder_list))
 combined_mesh = trimesh.util.concatenate(cylinder_list)
 
 
@@ -64,9 +64,9 @@ ax.set_xlabel("X (μm)"); ax.set_ylabel("Y (μm)"); ax.set_zlabel("Z (μm)")
 plt.savefig(f'{output_dir}/substrate_mesh.png', dpi=300, bbox_inches='tight')
 plt.close(fig)
 
-
+print(combined_mesh.bounds)
 combined_mesh.apply_scale(1e-6)
-
+print(combined_mesh.bounds)
 
 data_vertices = pd.DataFrame(combined_mesh.vertices, columns=['x', 'y', 'z'])
 data_vertices.to_csv(f'{output_dir}/{n_cylinders}_cylindersUP_vertices.csv', index=False)
