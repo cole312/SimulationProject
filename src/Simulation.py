@@ -41,6 +41,9 @@ fibFile = config["waveform"]["direction_file_fib"]
 b_num = config["waveform"]["num_b"]
 position = config["substrate"]["position"]
 
+if position.lower() == "none":
+    position = None
+
 rotations = np.loadtxt(f"rotations/{eulerFile}", comments="#")
 rotationsFib = np.loadtxt(f"rotations/{fibFile}", comments="#")
 rot_matrix = rotations.reshape(-1, 3, 3)
