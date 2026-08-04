@@ -1,6 +1,7 @@
 [substrate]
 name = "496_cylindersUP"
 position = "extra"
+periodic = True
 
 [simulation]
 diffusivity = 1e-9

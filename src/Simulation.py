@@ -33,6 +33,7 @@ with open(config_file_path, "rb") as f:
 meshName = config["substrate"]["name"]
 n_walkers = config["simulation"]["n_walkers"]
 n_t = config["simulation"]["n_t"]
+periodic = config["substrate"]["periodic"]
 diffusivity = config["simulation"]["diffusivity"]
 waveforms = config["waveform"]["waveform_file"]
 eulerFile = config["waveform"]["direction_file"]
@@ -71,7 +72,7 @@ def get_substrate(meshName):
     substrate = substrates.mesh(
         vertices,
         faces,
-        periodic=False,
+        periodic=periodic,
         init_pos=position
     )
 

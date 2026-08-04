@@ -1,6 +1,7 @@
 [substrate]
 name = "sphereRadius_5.0"
 position = "intra"
+periodic = True
 
 [simulation]
 diffusivity = 1e-9
