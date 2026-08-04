@@ -1,7 +1,7 @@
 [substrate]
 name = "beaded_bundle_rfiber_0.600_rbead_0.600_VOL"
 position = "intra"
-periodic = True
+periodic = true
 
 [simulation]
 diffusivity = 1e-9
