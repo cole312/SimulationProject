@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=ext_eul
+#SBATCH --job-name=uni_eul
 #SBATCH --time=12:00:00
 #SBATCH --cpus-per-task=10
 #SBATCH --gpus-per-node=1 
