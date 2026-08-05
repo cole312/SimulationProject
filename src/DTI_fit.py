@@ -156,3 +156,8 @@ for metric_name, diff, ax in metrics:
     ax.set_title(f"{metric_name} vs Frequency")
     ax.grid(True, which="both", linestyle="--", alpha=0.5)
     ax.legend(loc="lower left", fontsize=9)
+
+plt.tight_layout()
+
+output_path = f"graphOutputs/{Path(csv_file).name}/MD_AD_RD.png"
+plt.savefig(output_path, dpi=300)
