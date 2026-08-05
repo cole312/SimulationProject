@@ -110,6 +110,7 @@ for metric_name, diff, ax in metrics:
         linewidth=2,
         label=f'Squared {"(Best)" if best_fit_name == "Squared" else ""}',
     )
+
     ax.plot(
         x1,
         y_linear,
@@ -118,6 +119,7 @@ for metric_name, diff, ax in metrics:
         linewidth=2,
         label=f'Linear {"(Best)" if best_fit_name == "Linear" else ""}',
     )
+
     ax.plot(
         x1,
         y_sqrt,
@@ -127,18 +129,35 @@ for metric_name, diff, ax in metrics:
         label=f'Square Root {"(Best)" if best_fit_name == "Square Root" else ""}',
     )
 
-    # 4. Format plot
-    ax.set_ylabel(f"{metric_name} ($\mathrm{{mm^2/s}}$)")
+    # 4. Display best-fit equation and data values
+    if best_fit_name == "Linear":
+        eq = f"y = {lin_params[0]:.3e}x {lin_params[1]:+.3e}"
+    elif best_fit_name == "Square Root":
+        eq = f"y = {sqrt_params[0]:.3e}√x {sqrt_params[1]:+.3e}"
+    else:
+        eq = f"y = {sq_params[0]:.3e}x² {sq_params[1]:+.3e}"
+
+    eq_text = (
+        f"Best Fit: {best_fit_name}\n"
+        f"{eq}\n\n"
+        f"0 Hz   = {diff[0]:.3e}\n"
+        f"50 Hz  = {diff[1]:.3e}\n"
+        f"100 Hz = {diff[2]:.3e}"
+    )
+
+    ax.text(
+        0.02,
+        0.98,
+        eq_text,
+        transform=ax.transAxes,
+        fontsize=8,
+        verticalalignment="top",
+        bbox=dict(facecolor="white", alpha=0.85, edgecolor="black"),
+    )
+
+    # 5. Format plot
+    ax.set_ylabel(f"{metric_name} ($\\mathrm{{mm^2/s}}$)")
     ax.set_xlabel("Frequency (Hz)")
     ax.set_title(f"{metric_name} vs Frequency")
     ax.grid(True, which="both", linestyle="--", alpha=0.5)
-    ax.legend(loc="best", fontsize=9)
-
-plt.tight_layout()
-
-# Save output
-output_path = f"graphOutputs/{Path(csv_file).name}/MD_AD_RD.png"
-plt.savefig(output_path, dpi=300)
-
-
-
+    ax.legend(loc="lower left", fontsize=9)
