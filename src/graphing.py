@@ -18,7 +18,7 @@ graph_title = os.path.basename(signal_file)
 os.makedirs(f'graphOutputs/{signal_file}',exist_ok=True)
 output = f"graphOutputs/{signal_file}"
 
-df = pd.read_csv(f"outputs/{signal_file}", comment="#")
+df = pd.read_csv(f"{signal_file}", comment="#")
 
 df_averaged = df.groupby(['waveform_idx', 'bval'])['signal'].mean()
 
@@ -170,6 +170,3 @@ try:
 
 except:
     print("no traj file found")
-
-
-data = np.loadtxt(f"outputs/traj_{signal_file}")
