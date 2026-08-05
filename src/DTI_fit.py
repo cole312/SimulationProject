@@ -63,7 +63,7 @@ metrics = [
 ]
 
 for metric_name, diff, ax in metrics:
-    # 1. Fit Linear, Square Root, and Squared models
+
     lin_params = np.polyfit(freq, diff, 1)
     lin_fit_vals = lin_params[0] * freq + lin_params[1]
     lin_error = np.sum((diff - lin_fit_vals) ** 2)
@@ -79,7 +79,6 @@ for metric_name, diff, ax in metrics:
     sq_error = np.sum((diff - sq_fit_vals) ** 2)
     y_squared = sq_params[0] * (x1**2) + sq_params[1]
 
-    # 2. Identify best fit model
     errors = {
         "Square Root": sqrt_error,
         "Linear": lin_error,
@@ -91,7 +90,6 @@ for metric_name, diff, ax in metrics:
     ls_linear = "-" if best_fit_name == "Linear" else ":"
     ls_sqrt = "-" if best_fit_name == "Square Root" else ":"
 
-    # 3. Plot Scatter and Fits on current subplot
     ax.scatter(
         freq,
         diff,
@@ -101,7 +99,6 @@ for metric_name, diff, ax in metrics:
         zorder=5,
         label="Data Points",
     )
-
     ax.plot(
         x1,
         y_squared,
@@ -129,13 +126,12 @@ for metric_name, diff, ax in metrics:
         label=f'Square Root {"(Best)" if best_fit_name == "Square Root" else ""}',
     )
 
-    # 4. Display best-fit equation and data values
     if best_fit_name == "Linear":
         eq = f"y = {lin_params[0]:.3e}x {lin_params[1]:+.3e}"
     elif best_fit_name == "Square Root":
-        eq = f"y = {sqrt_params[0]:.3e}√x {sqrt_params[1]:+.3e}"
+        eq = f"y = {sqrt_params[0]:.3e}x^1/2 {sqrt_params[1]:+.3e}"
     else:
-        eq = f"y = {sq_params[0]:.3e}x² {sq_params[1]:+.3e}"
+        eq = f"y = {sq_params[0]:.3e}x^2 {sq_params[1]:+.3e}"
 
     eq_text = (
         f"Best Fit: {best_fit_name}\n"
@@ -155,7 +151,6 @@ for metric_name, diff, ax in metrics:
         bbox=dict(facecolor="white", alpha=0.85, edgecolor="black"),
     )
 
-    # 5. Format plot
     ax.set_ylabel(f"{metric_name} ($\\mathrm{{mm^2/s}}$)")
     ax.set_xlabel("Frequency (Hz)")
     ax.set_title(f"{metric_name} vs Frequency")
