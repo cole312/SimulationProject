@@ -3,12 +3,11 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import os
 
-# 1. Paths to your files (change if names differ)
-substrate_file = "multiSphere_radiusMany"
+substrate_file = "axon_fiber0.337_bead1.0"
 
 v_file = f"substrate/{substrate_file}/{substrate_file}_vertices.csv"
 f_file = f"substrate/{substrate_file}/{substrate_file}_faces.csv"
-output_png = f"substrate/{substrate_file}/{substrate_file}_view.png"
+output_png = f"substrate/{substrate_file}/{substrate_file}_views.svg"
 
 vertices = np.loadtxt(v_file, delimiter=",",skiprows=1)
 faces = np.loadtxt(f_file, delimiter=",",skiprows=1)
