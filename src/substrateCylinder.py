@@ -4,15 +4,16 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-n_cylinders = 2000
-cyl_height = 10
-domain_size = 30
+n_cylinders = 7000
+cyl_height = 1000
+domain_size = 100
 
-output_dir = f"substrate/{n_cylinders}_cylinders_rad_dis_0.05_0.5"
+output_dir = f"substrate/{n_cylinders}_cylinders_rad_0.5"
 os.makedirs(output_dir, exist_ok=True)
 
 cylinder_list = []
 placed_positions = []  # (x, y, radius)
+cyl_radius = 0.5
 
 
 def is_overlapping(x, y, radius, existing_positions):
@@ -27,8 +28,6 @@ for i in range(n_cylinders):
     placed = False
     attempts = 0
     max_attempts = 5000
-
-    cyl_radius = np.random.uniform(0.05, 0.5)
 
     while not placed and attempts < max_attempts:
 
@@ -46,6 +45,7 @@ for i in range(n_cylinders):
             cylinder_list.append(cyl)
             placed_positions.append((x_pos, y_pos, cyl_radius))
             placed = True
+            print(f"placed cyl {i+1}")
 
         attempts += 1
 
