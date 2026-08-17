@@ -80,7 +80,7 @@ ax.legend(loc='upper left', bbox_to_anchor=(1.02, 1))
 
 plt.subplots_adjust(right=0.7)
 
-plt.savefig(f"{output}/{graph_title}.png", dpi=300)
+plt.savefig(f"{output}/{graph_title}.png", dpi=300, bbox_inches='tight')
 
 fig, ax = plt.subplots(figsize=(8, 5))
 
