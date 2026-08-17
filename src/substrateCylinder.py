@@ -8,12 +8,14 @@ n_cylinders = 7000
 cyl_height = 1000
 domain_size = 100
 
-output_dir = f"substrate/{n_cylinders}_cylinders_rad_0.5"
+output_dir = f"substrate/{n_cylinders}_cylinders_gamma_rad_mean_0.5_width_1.0"
 os.makedirs(output_dir, exist_ok=True)
 
 cylinder_list = []
 placed_positions = []  # (x, y, radius)
-cyl_radius = 0.5
+
+gamma_shape = 0.25
+gamma_scale = 2.0
 
 
 def is_overlapping(x, y, radius, existing_positions):
@@ -25,9 +27,11 @@ def is_overlapping(x, y, radius, existing_positions):
 
 
 for i in range(n_cylinders):
+    cyl_radius = np.random.gamma(gamma_shape, gamma_scale)
+
     placed = False
     attempts = 0
-    max_attempts = 5000
+    max_attempts = 2000
 
     while not placed and attempts < max_attempts:
 
