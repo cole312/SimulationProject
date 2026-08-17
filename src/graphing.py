@@ -15,8 +15,8 @@ args = parser.parse_args()
 signal_file = args.signals
 graph_title = os.path.basename(signal_file)
 
-os.makedirs(f'graphOutputs/{signal_file}',exist_ok=True)
-output = f"graphOutputs/{signal_file}"
+os.makedirs(f'graphOutputs/{graph_title}',exist_ok=True)
+output = f"graphOutputs/{graph_title}"
 
 df = pd.read_csv(f"{signal_file}", comment="#")
 
@@ -133,7 +133,7 @@ plt.tight_layout()
 plt.savefig(f"{output}/{graph_title}_fmd.svg", dpi=300)
 
 try:
-    traj_file = f"outputs/traj_{signal_file}"
+    traj_file = f"outputs/traj_{graph_title}"
 
     print(traj_file)
 
