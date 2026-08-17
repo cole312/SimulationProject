@@ -76,11 +76,11 @@ ax.set_ylabel("Normalized Signal ($S/S_0$)")
 ax.set_title(f"Signal Decay")
 ax.grid(True, which="both", linestyle='--', alpha=0.5)
 
-ax.legend(bbox_to_anchor=(1.05, 1), loc='upper right')
+ax.legend(loc='upper left', bbox_to_anchor=(1.02, 1))
 
-plt.tight_layout()
-ax.set_position([0.12, 0.12, 0.65, 0.78])
-plt.savefig(f"{output}/{graph_title}.png", dpi=300,bbox_inches='tight')
+plt.subplots_adjust(right=0.7)
+
+plt.savefig(f"{output}/{graph_title}.png", dpi=300)
 
 fig, ax = plt.subplots(figsize=(8, 5))
 
