@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 from dipy.core.gradients import gradient_table
-from dipy.reconst import dti
+from dipy.reconst import dki
 import argparse
 import matplotlib.pyplot as plt
 from pathlib import Path
@@ -35,7 +35,7 @@ for waveform_file, df_wave in df.groupby("file", sort=False):
         bvecs = rot_matrices[:,0,:]
 
         gtab = gradient_table(bvals=bvals, bvecs=bvecs)
-        fit = dti.TensorModel(gtab).fit(signals)
+        fit = dki.DiffusionKurtosisModel(gtab).fit(signals)
 
         print(f"Fractional Anisotropy (FA): {fit.fa:.3f}")
         print(f"Mean Diffusivity (MD):     {fit.md:.3e} mm^2/s")
@@ -44,18 +44,14 @@ for waveform_file, df_wave in df.groupby("file", sort=False):
         ad.append(fit.ad)
         print(f"Radial Diffusivity (RD):   {fit.rd:.3e} mm^2/s")
         rd.append(fit.rd)
-
-    
         count += 1
 
 
 freq = np.array([0, 50, 100])
 x1 = np.linspace(0, 200, 100)
 
-# Create 1x3 grid
 fig, axes = plt.subplots(1, 3, figsize=(18, 5), sharex=True)
 
-# Define metrics and their corresponding subplot axes
 metrics = [
     ("Mean Diffusivity (MD)", np.array(md), axes[0]),
     ("Axial Diffusivity (AD)", np.array(ad), axes[1]),
@@ -160,4 +156,7 @@ for metric_name, diff, ax in metrics:
 plt.tight_layout()
 
 output_path = f"graphOutputs/{Path(csv_file).name}/MD_AD_RD.png"
-plt.savefig(output_path, dpi=300)
+plt.savefig(output_path, dpi=300)\
+
+
+print()

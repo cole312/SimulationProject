@@ -27,13 +27,14 @@ def is_overlapping(x, y, radius, existing_positions):
 
 
 for i in range(n_cylinders):
-    cyl_radius = np.random.gamma(gamma_shape, gamma_scale)
 
     placed = False
     attempts = 0
     max_attempts = 2000
 
     while not placed and attempts < max_attempts:
+
+        cyl_radius = np.random.gamma(gamma_shape, gamma_scale)
 
         x_pos = np.random.uniform(-domain_size / 2, domain_size / 2)
         y_pos = np.random.uniform(-domain_size / 2, domain_size / 2)
@@ -84,13 +85,7 @@ plt.savefig(
 )
 plt.close(fig)
 
-print("Bounds before scaling:")
-print(combined_mesh.bounds)
-
 combined_mesh.apply_scale(1e-6)
-
-print("Bounds after scaling:")
-print(combined_mesh.bounds)
 
 data_vertices = pd.DataFrame(
     combined_mesh.vertices,
