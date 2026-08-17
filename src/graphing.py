@@ -130,7 +130,7 @@ ax.grid(True, which="both", linestyle='--', alpha=0.5)
 ax.legend(loc='best')
 
 plt.tight_layout()
-plt.savefig(f"{output}/{graph_title}_fmd.svg", dpi=300)
+plt.savefig(f"{output}/{graph_title}_fmd.png", dpi=300)
 
 try:
     traj_file = f"outputs/traj_{graph_title}"
@@ -165,7 +165,7 @@ try:
 
     ax.set_aspect('equal')
 
-    plt.savefig(f"{output}/{graph_title}_traj.svg", dpi=300)
+    plt.savefig(f"{output}/{graph_title}_traj.png", dpi=300)
     plt.close()
 
 except:
