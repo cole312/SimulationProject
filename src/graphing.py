@@ -99,7 +99,7 @@ plt.subplots_adjust(right=0.7)
 plt.savefig(f"{output}/signal_{graph_title}.png", dpi=300, bbox_inches='tight')
 plt.close(fig)
 
-#Store frequency-dependent params
+#Store freq dependent params
 freq = np.array([0, 50, 100])
 diffArr = np.array([md[0], md[1], md[2]])
 kurtArr = np.array([kurt[0], kurt[1], kurt[2]])
@@ -232,11 +232,11 @@ for waveform_file, df_wave in df.groupby("file", sort=False):
         print(f"Fractional Anisotropy (FA): {fit.fa:.3f}")
         fa.append(fit.fa)
         print(f"Mean Diffusivity (MD):     {fit.md:.3e} mm^2/s")
-        md.append(fit.md)
+        md.append(fit.md*1000)
         print(f"Axial Diffusivity (AD):    {fit.ad:.3e} mm^2/s")
-        ad.append(fit.ad)
+        ad.append(fit.ad*1000)
         print(f"Radial Diffusivity (RD):   {fit.rd:.3e} mm^2/s")
-        rd.append(fit.rd)
+        rd.append(fit.rd*1000)
 
         count += 1
 
@@ -305,20 +305,13 @@ for metric_name, diff, ax in metrics:
         f"100 Hz = {diff[2]:.3e}"
     )
 
-    ax.text(
-        0.02,
-        0.98,
-        eq_text,
-        transform=ax.transAxes,
-        fontsize=8,
-        verticalalignment="top",
-        bbox=dict(facecolor="white", alpha=0.85, edgecolor="black"),
-    )
+    ax.text(0.02,0.98,eq_text,transform=ax.transAxes,fontsize=8,verticalalignment="top",bbox=dict(facecolor="white", alpha=0.85, edgecolor="black"))
 
     #Fix AD y-axis range
-    ax.set_ylim(min(ad)*0.5,max(ad)*1.50) if metric_name == "Axial Diffusivity (AD)" else None
 
-    ax.set_ylabel(f"{metric_name} ($\\mathrm{{mm^2/s}}$)")
+    ax.set_ylim(min(min(md),min(rd))*0.90,max(max(md),max(rd))*1.10)
+    
+    ax.set_ylabel(f"{metric_name} ($\\mathrm{{µm^2/ms}}$)")
     ax.set_xlabel("Frequency (Hz)")
     ax.set_title(f"{metric_name} vs Frequency")
     ax.grid(True, which="both", linestyle="--", alpha=0.5)
