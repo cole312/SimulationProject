@@ -73,6 +73,7 @@ for wf in unique_waveforms:
 
     ax.scatter(b_values, signals, marker='o', label=f"{label_name} Data")
     ax.plot(x_fit, y_fit, linestyle='--', label=f"Fit (MD: {md[-1]:.4e}, K: {kurt[-1]:.4f}, V: {V[-1]})")
+    plt.close(fig)
 
 ax.set_yscale('log')
 ax.set_xlabel("b-value ($s/mm^2$)")
@@ -135,7 +136,7 @@ for name, param in paramList:
     ax.legend(loc='best')
 
     plt.tight_layout()
-    plt.savefig(f"{output}/{graph_title}_{name}.png", dpi=300)
+    plt.savefig(f"{output}/{name}_{graph_title}.png", dpi=300)
 
 try:
     traj_file = f"outputs/traj_{graph_title}"
