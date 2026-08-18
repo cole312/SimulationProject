@@ -53,8 +53,6 @@ for wf in unique_waveforms:
     if abs(A) < 1e-9:
         A = 0
     D = -B
-
-    V = []
     V.append(A*2)
 
     # v is a*2
