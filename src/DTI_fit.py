@@ -147,6 +147,8 @@ for metric_name, diff, ax in metrics:
         bbox=dict(facecolor="white", alpha=0.85, edgecolor="black"),
     )
 
+    
+    ax.set_ylim(min(ad)*0.5,max(ad)*1.50) if metric_name == "Axial Diffusivity (AD)" else None
     ax.set_ylabel(f"{metric_name} ($\\mathrm{{mm^2/s}}$)")
     ax.set_xlabel("Frequency (Hz)")
     ax.set_title(f"{metric_name} vs Frequency")

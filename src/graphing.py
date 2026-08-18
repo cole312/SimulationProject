@@ -28,7 +28,7 @@ curvesC = []
 V = []
 
 x_fit = np.linspace(0, max(df['bval'])/1000, 100)
-fig, ax = plt.subplots()
+fig, ax = plt.subplots(figsize=(9,5))
 
 for wf in unique_waveforms:
     wf_data = df_averaged.loc[wf]
@@ -62,8 +62,8 @@ for wf in unique_waveforms:
 
     y_fit = np.exp(A * (x_fit**2) + B * x_fit + C)
 
-    ax.scatter(b_arr, signals, marker='o', label=f"{label_name} Data")
-    ax.plot(x_fit, y_fit, linestyle='--', label=f"Fit (MD: {md[-1]:.4e} µm²/ms, K: {kurt[-1]:.4f}, V: {V[-1]:.4e} µm⁴/ms²)")
+    ax.scatter(b_arr, signals, marker='o', label=rf"$\bf{{{label_name}\ Data}}$")
+    ax.plot(x_fit, y_fit, linestyle='--', label=f"MD: {md[-1]:.4e} µm²/ms\nK: {kurt[-1]:.4f}\nV: {V[-1]:.4e} µm⁴/ms²")
 
 ax.set_yscale('log')
 ax.set_xlabel("b-value (ms/µm²)")
