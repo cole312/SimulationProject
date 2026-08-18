@@ -1,3 +1,15 @@
+"""
+Monte Carlo Simulation
+Runs diffusion simulations using a configured substrate and waveforms,
+generates signals, and saves simulation data and trajectories.
+Local usage:
+    python src/simulation.py <config.toml>
+SLURM usage:
+    Edit sim_config files on slurm repo to desired substrate name, then batch via: sbatch batch/{init_pos}_{rotation}.sh
+    NOTE: if doing extreme large sim (ex: 1 million walkers 100k time step) increase memory in batch file
+    to accommodate.
+"""
+
 import numpy as np
 from scipy.spatial.transform import Rotation as R
 import matplotlib.pyplot as plt
@@ -9,16 +21,13 @@ import csv
 import os
 import argparse
 
+#Generate random seed for simulation
 seed = np.random.randint(0, 2**32-1)
 print(seed)
 
+#Parse config file argument
 parser = argparse.ArgumentParser()
-parser.add_argument(
-    "config",
-    type=str,
-
-)
-
+parser.add_argument("config", type=str)
 args = parser.parse_args()
 
 config_file_path = args.config
@@ -26,6 +35,7 @@ config_file_path = args.config
 config_name = os.path.basename(config_file_path)
 config_name,_ = os.path.splitext(config_name)
 
+#Load simulation config
 with open(config_file_path, "rb") as f:
     config = tomli.load(f)
 
@@ -41,14 +51,13 @@ fibFile = config["waveform"]["direction_file_fib"]
 b_num = config["waveform"]["num_b"]
 position = config["substrate"]["position"]
 
-if position.lower() == "none":
-    position = None
-
+#Load rotation matrices
 rotations = np.loadtxt(f"rotations/{eulerFile}", comments="#")
 rotationsFib = np.loadtxt(f"rotations/{fibFile}", comments="#")
 rot_matrix = rotations.reshape(-1, 3, 3)
 rot_matrixFib = rotationsFib.reshape(-1, 3, 3)
 
+#Generate unique output filename
 def get_unique_filepath(filepath):
     if not os.path.exists(filepath):
         return filepath
@@ -63,6 +72,7 @@ def get_unique_filepath(filepath):
 
     return new_filepath
 
+#Load substrate mesh
 def get_substrate(meshName):
 
     print(meshName)
@@ -81,6 +91,7 @@ def get_substrate(meshName):
 
     return substrate
 
+#Read gradient waveform from CSV
 def read_shape(filename):
     """ 
     Takes x,y,z CSV vaules from MATLAB. 
@@ -104,16 +115,18 @@ def read_shape(filename):
 
     return x_grad,y_grad,z_grad
 
-
+#Load substrate
 substrate = get_substrate(meshName)
 
+#Create unique signal output file
 csv_filename = get_unique_filepath(
     f"outputs/{meshName}_signals_{config_name}.csv"
 )
 
 with open(csv_filename, mode="w", newline="") as f:
     writer = csv.writer(f)
-    
+
+    #Write simulation metadata
     f.write(f"# Config file used: {config_name}\n")
     f.write(f"# MC seed: {seed}\n")
     f.write(f"# Subtrate: {meshName}\n")
@@ -127,19 +140,22 @@ with open(csv_filename, mode="w", newline="") as f:
     mega_gradient = []
     metadata = []
 
-
+    #Loop through gradient waveforms
     for filecount, file in enumerate(waveforms):
 
+        #Select rotation set
         if filecount <= 2:
             curr_matrix = rot_matrixFib
         else:
             curr_matrix = rot_matrix
 
+        #Load gradient waveform
         x_grad, y_grad, z_grad = read_shape(file)
-        
+
         time = len(x_grad)*0.02
         time_points = np.arange(0,time,0.02)
 
+        #Create gradient array
         gradient = np.zeros([1,len(time_points),3])
 
         gradient[0,:,0] = x_grad
@@ -148,33 +164,28 @@ with open(csv_filename, mode="w", newline="") as f:
 
         gradient *= 1e-3
 
+        #Calculate base b-value
         print(f"Bval: {(gradients.calc_b(gradient,0.02e-3)*1e-6)[0]:.0f}")
 
+        #Rotate gradient into all directions
         gradient_final = np.zeros([len(curr_matrix), len(time_points), 3])
 
         for i in range(0, len(curr_matrix)):
-
             rot_waveform = gradient @ curr_matrix[i].T
-
             gradient_final[i, : , : ] = rot_waveform
 
+        #Interpolate gradient to simulation timestep
         gradient_final, dt = gradients.interpolate_gradient(gradient_final, 0.02e-3, int(n_t))
-        
-        b_base = (gradients.calc_b(gradient_final, dt) * 1e-6)
-        b_targets = np.linspace(0, 4500, b_num) 
 
-        #Scale gradient values to achieve different b's. Scale is calcuated via b_base
+        #Calculate base b-value and target b-values
+        b_base = (gradients.calc_b(gradient_final, dt) * 1e-6)
+        b_targets = np.linspace(0, 4500, b_num)
+
+        #Scale gradients to achieve target b-values
         for j, b in enumerate(b_targets):
             if b == 0:
                 for i in range(len(curr_matrix)):
-                    metadata.append(
-                        [
-                            file,
-                            filecount + 1,
-                            *curr_matrix[i].flatten(),
-                            b
-                        ]
-                    )
+                    metadata.append([file,filecount + 1,*curr_matrix[i].flatten(),b])
                 continue
 
             scale = np.sqrt(b / b_base[0])
@@ -183,78 +194,59 @@ with open(csv_filename, mode="w", newline="") as f:
 
             mega_gradient.append(scaled_gradient)
 
+            #Store waveform metadata
             for i in range(len(curr_matrix)):
-                metadata.append(
-                    [
-                    file,
-                    filecount + 1,
-                    *curr_matrix[i].flatten(),
-                    b
-                    ]
-                )
+                metadata.append([file,filecount + 1,*curr_matrix[i].flatten(),b])
 
+    #Combine all gradients
     mega_gradient = np.concatenate(mega_gradient, axis=0)
 
-
-
     print("Mega gradient shape:", mega_gradient.shape)
-
     print("Metadata entries:", len(metadata))
-
     print(f"\n\nRunning mega simulation.")
 
+    #Run sim
     signal = simulations.simulation(
-    n_walkers=int(n_walkers),
+        n_walkers=int(n_walkers),
+        diffusivity=diffusivity,
+        gradient=mega_gradient,
+        dt=dt,
+        substrate=substrate,
+        seed=seed
+    )
+
+    #Normalize signal by walker count
+    norm_signal = abs(signal / n_walkers)
+
+    signal_idx = 0
+
+    #Write signals to CSV
+    for row in metadata:
+        if row[-1] == 0:
+            writer.writerow([*row,1.0])
+        else:
+            writer.writerow([*row,norm_signal[signal_idx]])
+            signal_idx += 1
+
+#Run trajectory sim
+traj_file = get_unique_filepath(
+    f"outputs/traj_{meshName}_signals_{config_name}.csv"
+)
+
+trajSignal = simulations.simulation(
+    n_walkers=10,
     diffusivity=diffusivity,
     gradient=mega_gradient,
     dt=dt,
     substrate=substrate,
-    seed=seed
-    )
-    
-    norm_signal = abs(signal / n_walkers)
-    
-    signal_idx = 0
-
-    for row in metadata:
-        if row[-1] == 0:
-            writer.writerow(
-                [
-                *row,
-                1.0
-                ]
-            )
-        else:
-            writer.writerow(
-                [
-                *row,
-                norm_signal[signal_idx]
-                ]
-            )
-            signal_idx += 1
-
-
-traj_file = get_unique_filepath(
-    f"outputs/traj_{meshName}_signals_{config_name}.csv"
-)
-trajSignal = simulations.simulation(
-n_walkers=10,
-diffusivity=diffusivity,
-gradient=mega_gradient,
-dt=dt,
-substrate=substrate,
-seed=seed,
-traj=traj_file
+    seed=seed,
+    traj=traj_file
 )
 
+#Prit sim info
 print(f"# MC seed: {seed}\n")
 print(f"# Subtrate: {meshName}")
 print(f"# Walkers: {n_walkers}. Steps: {n_t}")
 print(f"# Position: {position}")
 print(f"# Diffusivity: {diffusivity}\n")
-
 print(f"Writing outputs to: {csv_filename}")
-
-
-
-
