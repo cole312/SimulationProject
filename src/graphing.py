@@ -36,6 +36,8 @@ x_fit = np.linspace(0, max(df['bval']), 100)
 
 
 for wf in unique_waveforms:
+
+    fig, ax = plt.subplots()
     wf_data = df_averaged.loc[wf]
 
     b_values = wf_data.index.tolist()
