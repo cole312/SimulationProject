@@ -32,11 +32,9 @@ curvesC = []
 V = []
 
 x_fit = np.linspace(0, max(df['bval']), 100)
-
+fig, ax = plt.subplots()
 
 for wf in unique_waveforms:
-
-    fig, ax = plt.subplots()
     wf_data = df_averaged.loc[wf]
 
     b_values = wf_data.index.tolist()
@@ -73,7 +71,6 @@ for wf in unique_waveforms:
 
     ax.scatter(b_values, signals, marker='o', label=f"{label_name} Data")
     ax.plot(x_fit, y_fit, linestyle='--', label=f"Fit (MD: {md[-1]:.4e}, K: {kurt[-1]:.4f}, V: {V[-1]})")
-    plt.close(fig)
 
 ax.set_yscale('log')
 ax.set_xlabel("b-value ($s/mm^2$)")
@@ -86,8 +83,7 @@ ax.legend(loc='upper left', bbox_to_anchor=(1.02, 1))
 plt.subplots_adjust(right=0.7)
 
 plt.savefig(f"{output}/{graph_title}.png", dpi=300, bbox_inches='tight')
-
-fig, ax = plt.subplots(figsize=(8, 5))
+plt.close(fig)
 
 freq = np.array([0, 50, 100])
 diff = np.array([md[0], md[1], md[2]])
@@ -98,6 +94,8 @@ print([md[0], md[1], md[2]])
 paramList = [("Diffusivity", diff), ("Kurtosis", kurt), ("Variance", variance)]
 
 for name, param in paramList:
+    
+    fig, ax = plt.subplots()
     ax.scatter(freq, param, color='red', marker='o', s=10, zorder=5, label=f'{name} Data Points')
 
     x1 = np.linspace(0, 200, 100)
@@ -137,6 +135,7 @@ for name, param in paramList:
 
     plt.tight_layout()
     plt.savefig(f"{output}/{name}_{graph_title}.png", dpi=300)
+    plt.close(fig)
 
 try:
     traj_file = f"outputs/traj_{graph_title}"
