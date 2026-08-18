@@ -31,7 +31,6 @@ curvesB = []
 curvesC = []
 V = []
 
-fig, ax = plt.subplots(figsize=(9, 5))
 x_fit = np.linspace(0, max(df['bval']), 100)
 
 
