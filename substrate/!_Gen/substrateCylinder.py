@@ -4,18 +4,19 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-n_cylinders = 7000
+name = "cylinders_gamma_rad_mean_0.5_width_1.0"
+
+n_cylinders = 7500
 cyl_height = 1000
 domain_size = 100
 
-output_dir = f"substrate/{n_cylinders}_cylinders_gamma_rad_mean_0.5_width_1.0"
-os.makedirs(output_dir, exist_ok=True)
+radii = []
 
 cylinder_list = []
 placed_positions = []  # (x, y, radius)
 
 gamma_shape = 0.25
-gamma_scale = 2.0
+gamma_scale = 1
 
 
 def is_overlapping(x, y, radius, existing_positions):
@@ -27,14 +28,15 @@ def is_overlapping(x, y, radius, existing_positions):
 
 
 for i in range(n_cylinders):
+    cyl_radius = np.random.gamma(gamma_shape, gamma_scale)
+    while cyl_radius < 0.01:
+        cyl_radius = np.random.gamma(gamma_shape, gamma_scale)
 
     placed = False
     attempts = 0
-    max_attempts = 2000
+    max_attempts = 3000
 
     while not placed and attempts < max_attempts:
-
-        cyl_radius = np.random.gamma(gamma_shape, gamma_scale)
 
         x_pos = np.random.uniform(-domain_size / 2, domain_size / 2)
         y_pos = np.random.uniform(-domain_size / 2, domain_size / 2)
@@ -51,6 +53,7 @@ for i in range(n_cylinders):
             placed_positions.append((x_pos, y_pos, cyl_radius))
             placed = True
             print(f"placed cyl {i+1}")
+            radii.append(cyl_radius)
 
         attempts += 1
 
@@ -58,6 +61,9 @@ for i in range(n_cylinders):
         print(f"Warning: Could not place cylinder {i + 1}")
 
 print(f"Placed {len(cylinder_list)} cylinders.")
+
+output_dir = f"substrate/{len(cylinder_list)}_{name}"
+os.makedirs(output_dir, exist_ok=True)
 
 combined_mesh = trimesh.util.concatenate(cylinder_list)
 
@@ -92,7 +98,7 @@ data_vertices = pd.DataFrame(
     columns=["x", "y", "z"]
 )
 data_vertices.to_csv(
-    f"{output_dir}/{n_cylinders}_cylindersUP_vertices.csv",
+    f"{output_dir}/{len(cylinder_list)}_{name}_vertices.csv",
     index=False
 )
 
@@ -101,10 +107,19 @@ data_faces = pd.DataFrame(
     columns=["v1", "v2", "v3"]
 )
 data_faces.to_csv(
-    f"{output_dir}/{n_cylinders}_cylindersUP_faces.csv",
+    f"{output_dir}/{len(cylinder_list)}_{name}_faces.csv",
     index=False
 )
 
-print("Watertight:", combined_mesh.is_watertight)
-print("Volume:", combined_mesh.is_volume)
+fig, ax = plt.subplots(figsize=(8, 5))
+ax.hist(radii, bins=50, density=True)
+ax.axvline(np.mean(radii), linestyle="--", linewidth=2, label=f"Mean = {np.mean(radii):.3f} µm")
+ax.set_xlabel("Radius (µm)")
+ax.set_ylabel("Amount")
+ax.set_title("Cylinder Radius Distribution")
+ax.legend()
+plt.tight_layout()
+plt.savefig(f"{output_dir}/radius_distribution.png", dpi=300)
+plt.close(fig)
 print("Done.")
+
