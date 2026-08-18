@@ -5,11 +5,7 @@ import pandas as pd
 import argparse
 
 parser = argparse.ArgumentParser()
-parser.add_argument(
-    "signals",
-    type=str,
-
-)
+parser.add_argument("signals", type=str)
 args = parser.parse_args()
 
 signal_file = args.signals
@@ -31,7 +27,7 @@ curvesB = []
 curvesC = []
 V = []
 
-x_fit = (np.linspace(0, max(df['bval']), 100))/1000
+x_fit = np.linspace(0, max(df['bval'])/1000, 100)
 fig, ax = plt.subplots()
 
 for wf in unique_waveforms:
@@ -43,19 +39,16 @@ for wf in unique_waveforms:
     b_arr = np.array(b_values)/1000
     signals_arr = np.array(signals)
 
-
-    mask = b_arr <= 10000
+    mask = b_arr <= 10
     b_mask = b_arr[mask]
     signals_mask = signals_arr[mask]
 
-    A, B, C = np.polyfit(b_mask/1000, np.log(signals_mask), 2)
+    A, B, C = np.polyfit(b_mask, np.log(signals_mask), 2)
     if abs(A) < 1e-9:
         A = 0
     D = -B
     V.append(A*2)
 
-    # v is a*2
-    #plot v and k with f
     kurt.append((6 * A) / (D**2))
     md.append(D)
 
@@ -64,16 +57,16 @@ for wf in unique_waveforms:
     curvesC.append(C)
 
     raw_path = df[df['waveform_idx'] == wf]['file'].iloc[0]
-    clean_filename = os.path.basename(raw_path) 
-    label_name = clean_filename.replace(".csv", "") 
+    clean_filename = os.path.basename(raw_path)
+    label_name = clean_filename.replace(".csv", "")
 
     y_fit = np.exp(A * (x_fit**2) + B * x_fit + C)
 
-    ax.scatter(b_values, signals, marker='o', label=f"{label_name} Data")
-    ax.plot(x_fit, y_fit, linestyle='--', label=f"Fit (MD: {md[-1]:.4e}, K: {kurt[-1]:.4f}, V: {V[-1]:.4e})")
+    ax.scatter(b_arr, signals, marker='o', label=f"{label_name} Data")
+    ax.plot(x_fit, y_fit, linestyle='--', label=f"Fit (MD: {md[-1]:.4e} µm²/ms, K: {kurt[-1]:.4f}, V: {V[-1]:.4e} µm⁴/ms²)")
 
 ax.set_yscale('log')
-ax.set_xlabel("b-value ($ms/µm^2$)")
+ax.set_xlabel("b-value (ms/µm²)")
 ax.set_ylabel("Normalized Signal ($S/S_0$)")
 ax.set_title(f"Signal Decay")
 ax.grid(True, which="both", linestyle='--', alpha=0.5)
@@ -94,7 +87,7 @@ print([md[0], md[1], md[2]])
 paramList = [("Diffusivity", diff), ("Kurtosis", kurt), ("Variance", variance)]
 
 for name, param in paramList:
-    
+
     fig, ax = plt.subplots()
     ax.scatter(freq, param, color='red', marker='o', s=10, zorder=5, label=f'{name} Data Points')
 
@@ -127,7 +120,13 @@ for name, param in paramList:
     ax.plot(x1, y_linear, color='#FF6B6B', linestyle=ls_linear, linewidth=2, label=f'Linear Fit {"(Best)" if best_fit_name == "Linear" else ""}')
     ax.plot(x1, y_sqrt, color='#009999', linestyle=ls_sqrt, linewidth=2, label=f'Square Root Fit {"(Best)" if best_fit_name == "Square Root" else ""}')
 
-    ax.set_ylabel(name)
+    if name == "Diffusivity":
+        ax.set_ylabel("Diffusivity (µm²/ms)")
+    elif name == "Kurtosis":
+        ax.set_ylabel("Kurtosis")
+    elif name == "Variance":
+        ax.set_ylabel("Variance (µm⁴/ms²)")
+
     ax.set_xlabel("Frequency (Hz)")
     ax.set_title(f"Frequency Dependence of {name}")
     ax.grid(True, which="both", linestyle='--', alpha=0.5)
@@ -144,11 +143,9 @@ try:
 
     data = np.loadtxt(traj_file)
 
-    # data shape = (time steps, walkers*3)
     n_steps = data.shape[0]
     n_walkers = data.shape[1] // 3
 
-    # reshape into (walker, timestep, xyz)
     traj = data.reshape(n_steps, n_walkers, 3).transpose(1, 0, 2)
 
     print("Trajectory shape:", traj.shape)
@@ -156,10 +153,8 @@ try:
     fig = plt.figure(figsize=(8, 8))
     ax = fig.add_subplot(111, projection='3d')
 
-    for i in range(10): 
+    for i in range(10):
         ax.plot(traj[i, :, 0],traj[i, :, 1],traj[i, :, 2],alpha=0.7,linewidth=0.3)
-
-        # ax.scatter(traj[i,:,0],traj[i,:,1],traj[i,:,2],s=1)
 
     ax.view_init(elev=0, azim=0)
     ax.set_title("Disimpy Trajectories")
