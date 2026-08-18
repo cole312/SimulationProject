@@ -31,7 +31,7 @@ curvesB = []
 curvesC = []
 V = []
 
-x_fit = np.linspace(0, max(df['bval']), 100)
+x_fit = (np.linspace(0, max(df['bval']), 100))/1000
 fig, ax = plt.subplots()
 
 for wf in unique_waveforms:
@@ -40,7 +40,7 @@ for wf in unique_waveforms:
     b_values = wf_data.index.tolist()
     signals = wf_data.values.tolist()
 
-    b_arr = np.array(b_values)
+    b_arr = np.array(b_values)/1000
     signals_arr = np.array(signals)
 
 
@@ -70,10 +70,10 @@ for wf in unique_waveforms:
     y_fit = np.exp(A * (x_fit**2) + B * x_fit + C)
 
     ax.scatter(b_values, signals, marker='o', label=f"{label_name} Data")
-    ax.plot(x_fit, y_fit, linestyle='--', label=f"Fit (MD: {md[-1]:.4e}, K: {kurt[-1]:.4f}, V: {V[-1]})")
+    ax.plot(x_fit, y_fit, linestyle='--', label=f"Fit (MD: {md[-1]:.4e}, K: {kurt[-1]:.4f}, V: {V[-1]:.4e})")
 
 ax.set_yscale('log')
-ax.set_xlabel("b-value ($s/mm^2$)")
+ax.set_xlabel("b-value ($ms/µm^2$)")
 ax.set_ylabel("Normalized Signal ($S/S_0$)")
 ax.set_title(f"Signal Decay")
 ax.grid(True, which="both", linestyle='--', alpha=0.5)
