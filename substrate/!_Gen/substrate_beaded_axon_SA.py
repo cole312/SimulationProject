@@ -67,12 +67,21 @@ for idx, radius_bead in enumerate(bead_radii_range):
 
     # Generate the 3x3 Bundled Geometry
     axons = []
+    for i in range(3):
+        for j in range(3):
+            x = j * (2 * radius_fiberOG + 0.5) + (i % 2) * radius_fiberOG 
+            y = i * (2 * radius_fiberOG + 0.5)
 
-    axon = create_ba(length, radius_fiber * 1e6, radius_bead * 1e6, spacing)
+            # Generate mesh in micron-scale units natively
+            axon = create_ba(length, radius_fiber * 1e6, radius_bead * 1e6, spacing)
+            axon.apply_translation([x, y, 0])
+            axons.append(axon)
+
+    axons = trimesh.util.concatenate(axons)
 
     axons.apply_scale(1e-6)
 
-    name = f"axon_fiber0.337_bead1.0"
+    name = f"beaded_bundle_rfiber_{radius_fiber*1e6:.3f}_rbead_{radius_bead*1e6:.3f}"
     output_dir = f"substrate/{name}"
     os.makedirs(output_dir, exist_ok=True)
 
