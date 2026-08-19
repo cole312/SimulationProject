@@ -6,9 +6,9 @@ import matplotlib.pyplot as plt
 
 name = "cylinders_gamma_rad_mean_0.5_width_1.0"
 
-n_cylinders = 7500
+n_cylinders = 2000
 cyl_height = 1000
-domain_size = 100
+domain_size = 15
 
 radii = []
 
@@ -28,9 +28,11 @@ def is_overlapping(x, y, radius, existing_positions):
 
 
 for i in range(n_cylinders):
-    cyl_radius = np.random.gamma(gamma_shape, gamma_scale)
-    while cyl_radius < 0.01:
-        cyl_radius = np.random.gamma(gamma_shape, gamma_scale)
+    #cyl_radius = np.random.gamma(gamma_shape, gamma_scale)
+    #while cyl_radius < 0.01:
+        #cyl_radius = np.random.gamma(gamma_shape, gamma_scale)
+
+    cyl_radius = 0.25
 
     placed = False
     attempts = 0
