@@ -4,11 +4,11 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-name = "cylinders_gamma_rad_mean_0.5_width_1.0"
+name = "cylinders_rad_1"
 
-n_cylinders = 2000
+n_cylinders = 2500
 cyl_height = 1000
-domain_size = 15
+domain_size = 100
 
 radii = []
 
@@ -32,7 +32,7 @@ for i in range(n_cylinders):
     #while cyl_radius < 0.01:
         #cyl_radius = np.random.gamma(gamma_shape, gamma_scale)
 
-    cyl_radius = 0.25
+    cyl_radius = 1
 
     placed = False
     attempts = 0
