@@ -309,8 +309,8 @@ for metric_name, diff, ax in metrics:
 
     #Fix AD y-axis range
 
-    ax.set_ylim(min(min(md),min(rd))*0.90,max(max(md),max(rd))*1.10)
-    
+    ax.set_ylim(min(min(md),min(rd),min(ad))*0.85,max(max(md),max(rd),max(ad))*1.15)
+
     ax.set_ylabel(f"{metric_name} ($\\mathrm{{µm^2/ms}}$)")
     ax.set_xlabel("Frequency (Hz)")
     ax.set_title(f"{metric_name} vs Frequency")
