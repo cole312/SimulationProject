@@ -10,6 +10,6 @@
 # Run computation
 cd /nfs/scratch/choover/SimulationProject2/
 
-pixi run python src/simulation.py sim_configs/fibONLY.toml
+pixi run python src/Simulation.py sim_configs/fibONLY.toml
 
 
