@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-name = "cylinders_rad_1"
+name = "cylinders_shape0.75_scale1"
 
 n_cylinders = 2500
 cyl_height = 1000
@@ -15,7 +15,7 @@ radii = []
 cylinder_list = []
 placed_positions = []  # (x, y, radius)
 
-gamma_shape = 0.25
+gamma_shape = 0.75
 gamma_scale = 1
 
 
@@ -28,11 +28,9 @@ def is_overlapping(x, y, radius, existing_positions):
 
 
 for i in range(n_cylinders):
-    #cyl_radius = np.random.gamma(gamma_shape, gamma_scale)
-    #while cyl_radius < 0.01:
-        #cyl_radius = np.random.gamma(gamma_shape, gamma_scale)
-
-    cyl_radius = 1
+    cyl_radius = np.random.gamma(gamma_shape, gamma_scale)
+    while cyl_radius < 0.01:
+        cyl_radius = np.random.gamma(gamma_shape, gamma_scale)
 
     placed = False
     attempts = 0
