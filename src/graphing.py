@@ -96,7 +96,7 @@ ax.grid(True, which="both", linestyle='--', alpha=0.5)
 ax.legend(loc='upper left', bbox_to_anchor=(1.02, 1))
 
 plt.subplots_adjust(right=0.7)
-plt.savefig(f"{output}/signal_{graph_title}.svg", dpi=300, bbox_inches='tight')
+plt.savefig(f"{output}/signal_{graph_title}.png", dpi=300, bbox_inches='tight')
 plt.close(fig)
 
 #Store freq dependent params
@@ -162,7 +162,7 @@ for name, param in paramList:
     ax.legend(loc='best')
 
     plt.tight_layout()
-    plt.savefig(f"{output}/{name}_{graph_title}.svg", dpi=300)
+    plt.savefig(f"{output}/{name}_{graph_title}.png", dpi=300)
     plt.close(fig)
 
 #Plot walker trajectories if available
@@ -319,7 +319,7 @@ for metric_name, diff, ax in metrics:
 
 plt.tight_layout()
 
-output_path = f"graphOutputs/{Path(csv_file).name}/MD_AD_RD.svg"
+output_path = f"graphOutputs/{Path(csv_file).name}/MD_AD_RD.png"
 plt.savefig(output_path, dpi=300)
 
 #Export results
