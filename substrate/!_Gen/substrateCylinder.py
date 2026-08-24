@@ -10,7 +10,9 @@ cyl_height = 1000
 domain_size = 100
 gamma = True
 gamma_shape = 0.75
-gamma_scale = 1
+gamma_scale = 0.55
+max_radius = 1.5
+min_radius = 0.01
 
 if gamma:
     name = f"cylinders_gamma_shape{gamma_shape}_scale{gamma_scale}_spread{spread}"
@@ -20,8 +22,6 @@ radii = []
 
 cylinder_list = []
 placed_positions = []  # (x, y, radius)
-
-
 
 
 def is_overlapping(x, y, radius, existing_positions):
@@ -37,10 +37,10 @@ try:
     for i in range(n_cylinders):
         if gamma:
             cyl_radius = np.random.gamma(gamma_shape, gamma_scale)
-            while cyl_radius < 0.01:
+            while cyl_radius < min_radius or cyl_radius > max_radius:
                 cyl_radius = np.random.gamma(gamma_shape, gamma_scale)
         else:
-            cyl_radius = 0.5
+                cyl_radius = 0.5
 
         print(cyl_radius)
         placed = False
@@ -141,5 +141,9 @@ ax.legend()
 plt.tight_layout()
 plt.savefig(f"{output_dir}/radius_distribution.png", dpi=300)
 plt.close(fig)
-print("Done.")
 
+print("Mean radius:", np.mean(radii))
+print("Maximum radius:", np.max(radii))
+print("Minimum radius:", np.min(radii))
+
+print("Done.")
