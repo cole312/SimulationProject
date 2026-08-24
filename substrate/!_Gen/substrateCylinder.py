@@ -4,61 +4,81 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-name = "cylinders_shape0.75_scale1"
-
-n_cylinders = 2500
+spread = 0.5
+n_cylinders = 4500
 cyl_height = 1000
 domain_size = 100
+gamma = True
+gamma_shape = 0.75
+gamma_scale = 1
 
+if gamma:
+    name = f"cylinders_gamma_shape{gamma_shape}_scale{gamma_scale}_spread{spread}"
+else:
+    name = f"cylinders_uniform_spread{spread}"
 radii = []
 
 cylinder_list = []
 placed_positions = []  # (x, y, radius)
 
-gamma_shape = 0.75
-gamma_scale = 1
+
 
 
 def is_overlapping(x, y, radius, existing_positions):
     for ex, ey, eradius in existing_positions:
         dist = np.sqrt((x - ex) ** 2 + (y - ey) ** 2)
-        if dist < (radius + eradius):
+        if dist < (radius + eradius + spread):
             return True
     return False
 
 
-for i in range(n_cylinders):
-    cyl_radius = np.random.gamma(gamma_shape, gamma_scale)
-    while cyl_radius < 0.01:
-        cyl_radius = np.random.gamma(gamma_shape, gamma_scale)
+consecutive = 0
+try:
+    for i in range(n_cylinders):
+        if gamma:
+            cyl_radius = np.random.gamma(gamma_shape, gamma_scale)
+            while cyl_radius < 0.01:
+                cyl_radius = np.random.gamma(gamma_shape, gamma_scale)
+        else:
+            cyl_radius = 0.5
 
-    placed = False
-    attempts = 0
-    max_attempts = 3000
+        print(cyl_radius)
+        placed = False
+        attempts = 0
+        max_attempts = 2000
 
-    while not placed and attempts < max_attempts:
+        while not placed and attempts < max_attempts:
 
-        x_pos = np.random.uniform(-domain_size / 2, domain_size / 2)
-        y_pos = np.random.uniform(-domain_size / 2, domain_size / 2)
+            x_pos = np.random.uniform(-domain_size / 2, domain_size / 2)
+            y_pos = np.random.uniform(-domain_size / 2, domain_size / 2)
 
-        if not is_overlapping(x_pos, y_pos, cyl_radius, placed_positions):
+            if not is_overlapping(x_pos, y_pos, cyl_radius, placed_positions):
 
-            cyl = trimesh.creation.cylinder(
-                radius=cyl_radius,
-                height=cyl_height
-            )
-            cyl.apply_translation([x_pos, y_pos, 0])
+                cyl = trimesh.creation.cylinder(
+                    radius=cyl_radius,
+                    height=cyl_height
+                )
+                cyl.apply_translation([x_pos, y_pos, 0])
 
-            cylinder_list.append(cyl)
-            placed_positions.append((x_pos, y_pos, cyl_radius))
-            placed = True
-            print(f"placed cyl {i+1}")
-            radii.append(cyl_radius)
+                cylinder_list.append(cyl)
+                placed_positions.append((x_pos, y_pos, cyl_radius))
+                placed = True
+                print(f"placed cyl {i+1}")
+                radii.append(cyl_radius)
 
-        attempts += 1
+            attempts += 1
 
-    if not placed:
-        print(f"Warning: Could not place cylinder {i + 1}")
+        if not placed:
+            consecutive += 1
+            print(f"Warning: Could not place cylinder {i + 1}")
+        else:
+            consecutive = 0
+
+        if consecutive == 100:
+            print("Max consecutive failed attemps")
+            break
+except:
+    print("Manual Stop. Finishing.")
 
 print(f"Placed {len(cylinder_list)} cylinders.")
 

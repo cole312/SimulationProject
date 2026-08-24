@@ -7,6 +7,9 @@ Usage:
     python src/graphing.py <signals.csv>
 """
 
+#csv, DKI metrics, sphere sqr root Variance, multiple different packing and radii for cyl
+
+
 import os
 import numpy as np
 import matplotlib.pyplot as plt
