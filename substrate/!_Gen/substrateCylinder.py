@@ -12,7 +12,7 @@ gamma = True
 gamma_shape = 0.75
 gamma_scale = 0.55
 max_radius = 1.5
-min_radius = 0.01
+min_radius = 0.1
 
 if gamma:
     name = f"cylinders_gamma_shape{gamma_shape}_scale{gamma_scale}_spread{spread}"
