@@ -11,6 +11,7 @@ Usage:
 
 
 import os
+import csv
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -330,17 +331,13 @@ print(len(variance),len(kurt))
 
 waveform = ["LTE-0Hz","LTE-50Hz","LTE-100Hz","STE-Iso","STE-Aniso"]
 
-with open(f"{output}/results.txt", "w") as f:
-    f.write(f"File: {graph_title}\n\n")
-    f.write(f"{'Waveform':<15}{'FA':>10}{'MD':>15}{'AD':>15}{'RD':>15}{'Kurtosis':>20}{'Variance':>13}\n")
-    f.write(f"-"*105 + "\n")
+with open(f"{output}/results.csv", "w", newline="") as f:
+    writer = csv.writer(f)
 
-    #Write LTE results
+    writer.writerow(["Waveform", "FA", "MD", "AD", "RD", "Kurtosis", "Variance"])
+
     for i in range(3):
-        f.write(f"{waveform[i]:<15}{fa[i]:>15.6f}{md[i]:>15.6e}{ad[i]:>15.6e}{rd[i]:>15.6e}{kurt[i]:>15.6f}{variance[i]:>15.6e}\n")
+        writer.writerow([waveform[i], fa[i], md[i], ad[i], rd[i], kurt[i], variance[i]])
 
-    f.write("\n")
-
-    #Write STE results
-    for j in range(3,5):
-        f.write(f"{waveform[j]:<15}{'-':>12}{'-':>14}{'-':>14}{'-':>15}{kurt[j]:>20.6f}{variance[j]:>15.6e}\n")
+    for j in range(3, 5):
+        writer.writerow([waveform[j], " ", " ", " ", " ", kurt[j], variance[j]])
