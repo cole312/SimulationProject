@@ -340,4 +340,4 @@ with open(f"{output}/results.csv", "w", newline="") as f:
         writer.writerow([waveform[i], fa[i], md[i], ad[i], rd[i], kurt[i], variance[i]])
 
     for j in range(3, 5):
-        writer.writerow([waveform[j], " ", " ", " ", " ", kurt[j], variance[j]])
+        writer.writerow([waveform[j], "", "", "", "", kurt[j], variance[j]])
