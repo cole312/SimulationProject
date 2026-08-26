@@ -1,5 +1,5 @@
 [substrate]
-name = "496_cylindersUP"
+name = "spheres_3d_distribution_4_to_12_um"
 position = "extra"
 periodic = false
 
