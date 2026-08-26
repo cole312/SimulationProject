@@ -4,8 +4,8 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-spread = 0
-n_cylinders =8000
+spread = 0.75
+n_cylinders =6000
 cyl_height = 1000
 domain_size = 120
 gamma = False
