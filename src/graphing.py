@@ -313,7 +313,7 @@ for metric_name, diff, ax in metrics:
 
     #Fix AD y-axis range
 
-    ax.set_ylim(min(min(md),min(rd),min(ad))*0.85,max(max(md),max(rd),max(ad))*1.15)
+    ax.set_ylim(min(ad)*0.5,max(ad)*1.50) if metric_name == "Axial Diffusivity (AD)" else None
 
     ax.set_ylabel(f"{metric_name} ($\\mathrm{{µm^2/ms}}$)")
     ax.set_xlabel("Frequency (Hz)")
