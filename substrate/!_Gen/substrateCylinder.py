@@ -4,15 +4,16 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-spread = 0.75
-n_cylinders = 4500
+spread = 0
+n_cylinders =500
 cyl_height = 1000
-domain_size = 100
+domain_size = 30
 gamma = False
 gamma_shape = 0.75
 gamma_scale = 0.55
 max_radius = 2
 min_radius = 0.1
+cyl_radius = 0.5
 
 if gamma:
     name = f"cylinders_gamma_shape{gamma_shape}_scale{gamma_scale}_spread{spread}"
@@ -40,7 +41,7 @@ try:
             while cyl_radius < min_radius or cyl_radius > max_radius:
                 cyl_radius = np.random.gamma(gamma_shape, gamma_scale)
         else:
-                cyl_radius = 0.431
+                cyl_radius = cyl_radius
 
         print(cyl_radius)
         placed = False
