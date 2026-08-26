@@ -138,13 +138,13 @@ graphOutputs/<signal_file>/
 ## Typical Workflow
 
 ```bash
-# Enter environment
+#Enter environment
 pixi shell
 
-# Run simulation
+#Run simulation
 python src/simulation.py sim_configs/<config>.toml
 
-# Analyze signal
+#Analyze signal
 python src/graphing.py outputs/<signal_file>.csv
 ```
 
