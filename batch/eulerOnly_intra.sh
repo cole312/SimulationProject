@@ -10,6 +10,6 @@
 # Run computation
 cd /nfs/scratch/choover/SimulationProject2/
 
-pixi run python src/Simulation.py sim_configs/eulerOnly_intra.toml
+pixi run python src/Simulation.py sim_configs/eulerONLY_intra.toml
 
 
