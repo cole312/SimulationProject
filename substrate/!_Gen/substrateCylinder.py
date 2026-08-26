@@ -5,9 +5,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 spread = 0
-n_cylinders =500
+n_cylinders =8000
 cyl_height = 1000
-domain_size = 30
+domain_size = 120
 gamma = False
 gamma_shape = 0.75
 gamma_scale = 0.55

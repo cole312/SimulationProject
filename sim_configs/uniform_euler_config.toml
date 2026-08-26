@@ -1,5 +1,5 @@
 [substrate]
-name = "496_cylindersUP"
+name = "8000_cylinders_uniform_spread0"
 position = "uniform"
 periodic = false
 

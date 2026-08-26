@@ -1,5 +1,5 @@
 [substrate]
-name = "sphereRadius_5.0"
+name = "8000_cylinders_uniform_spread0"
 position = "intra"
 periodic = false
 
