@@ -11,8 +11,8 @@ domain_size = 120
 gamma = True
 gamma_shape = 0.75
 gamma_scale = 0.55
-max_radius = 2
-min_radius = 0.4
+max_radius = 2.5
+min_radius = 0.7
 cyl_radius = 0.5
 
 if gamma:
