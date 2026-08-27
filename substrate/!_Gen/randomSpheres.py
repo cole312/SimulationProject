@@ -4,13 +4,13 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-substrate_name = "spheres_3d_distribution_4_to_12_um"
+substrate_name = "spheres_2_12um"
 output_dir = f"substrate/{substrate_name}"
 os.makedirs(output_dir, exist_ok=True)
 
 np.random.seed(123) 
 num_spheres = 50
-radii = np.random.uniform(4, 12, num_spheres)
+radii = np.random.uniform(2, 12, num_spheres)
 
 box_size = 100
 buffer = 1.0 
