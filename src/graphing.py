@@ -41,6 +41,7 @@ df_averaged = df.groupby(['waveform_idx', 'bval'])['signal'].mean()
 unique_waveforms = sorted(df['waveform_idx'].unique())
 
 #Store fit params
+d = []
 md = []
 kurt = []
 curvesA = []
@@ -74,7 +75,7 @@ for wf in unique_waveforms:
     D = -B
     variance.append(A*2)
     kurt.append((6 * A) / (D**2))
-    md.append(D)
+    d.append(D)
 
     curvesA.append(A)
     curvesB.append(B)
@@ -89,7 +90,7 @@ for wf in unique_waveforms:
     y_fit = np.exp(A * (x_fit**2) + B * x_fit + C)
 
     ax.scatter(b_arr, signals, marker='o', label=rf"$\bf{{{label_name}\ Data}}$")
-    ax.plot(x_fit, y_fit, linestyle='--', label=f"MD: {md[-1]:.4e} µm²/ms\nK: {kurt[-1]:.4f}\nV: {variance[-1]:.4e} µm⁴/ms²")
+    ax.plot(x_fit, y_fit, linestyle='--', label=f"D: {d[-1]:.4e} µm²/ms\nK: {kurt[-1]:.4f}\nV: {variance[-1]:.4e} µm⁴/ms²")
 
 #Plot signal decay
 ax.set_yscale('log')
@@ -105,11 +106,11 @@ plt.close(fig)
 
 #Store freq dependent params
 freq = np.array([0, 50, 100])
-diffArr = np.array([md[0], md[1], md[2]])
+diffArr = np.array([d[0], d[1], d[2]])
 kurtArr = np.array([kurt[0], kurt[1], kurt[2]])
 varianceArr = np.array([variance[0], variance[1], variance[2]])
 
-print([md[0], md[1], md[2]])
+print([d[0], d[1], d[2]])
 
 paramList = [("Diffusivity", diffArr), ("Kurtosis", kurtArr), ("Variance", varianceArr)]
 
@@ -334,10 +335,10 @@ waveform = ["LTE-0Hz","LTE-50Hz","LTE-100Hz","STE-Iso","STE-Aniso"]
 with open(f"{output}/results.csv", "w", newline="") as f:
     writer = csv.writer(f)
 
-    writer.writerow(["Waveform", "FA", "MD", "AD", "RD", "Kurtosis", "Variance"])
+    writer.writerow(["Waveform", "FA", "MD", "AD", "RD","D", "Kurtosis", "Variance"])
 
     for i in range(3):
-        writer.writerow([waveform[i], fa[i], md[i], ad[i], rd[i], kurt[i], variance[i]])
+        writer.writerow([waveform[i], fa[i], md[i], ad[i], rd[i], d[i], kurt[i], variance[i]])
 
     for j in range(3, 5):
-        writer.writerow([waveform[j], "", "", "", "", kurt[j], variance[j]])
+        writer.writerow([waveform[j], "", "", "", "", d[j], kurt[j], variance[j]])
