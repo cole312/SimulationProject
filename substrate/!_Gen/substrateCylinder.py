@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-spread = 0.4
+spread = 0.45
 n_cylinders =3000
 cyl_height = 1000
 domain_size = 120
