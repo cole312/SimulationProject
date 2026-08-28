@@ -17,4 +17,4 @@ waveform_file = [
     "gradients/STEaniso.csv"
 ]
 num_directions = 30
-num_b = 6
+num_b = [0, 900, 1800, 2700, 3600, 4500]

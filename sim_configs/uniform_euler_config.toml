@@ -18,4 +18,4 @@ waveform_file = [
 ]
 direction_file = "GFOD2_0040.txt"
 direction_file_fib = "fibRot40.txt"
-num_b = 6
+num_b = [0, 900, 1800, 2700, 3600, 4500]
